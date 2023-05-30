@@ -5,9 +5,8 @@ class Home extends Controller{
         parent::__construct();
     }
 
-    public function index($param){
-        $data = $this->model->getData($param);
-        $this->views->View('main','login',$data);
+    public function index(){        
+        $this->views->View('main','login');
     }
 
 }

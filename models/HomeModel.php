@@ -1,8 +1,13 @@
 <?php
-class HomeModel{
-    public function getData($param){
-        
-        return 'Message from model: ' . $param;
+class HomeModel extends Query{
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function getData(){
+
+
     }
 }
 ?>

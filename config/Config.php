@@ -1,7 +1,9 @@
 <?php
 define('HOST', 'localhost');
-define('USER', 'ROOT');
+define('USER', 'root');
 define('PASS', '');
-define('DBNAME', '');
+define('DBNAME', 'ospixel_db');
+define('CHARSET', '');
+
 
 ?>
