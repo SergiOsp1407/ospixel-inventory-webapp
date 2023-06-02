@@ -5,8 +5,10 @@ class HomeModel extends Query{
         parent::__construct();
     }
 
-    public function getData(){
+    public function getData($email){
 
+        $sql = "SELECT name, email, password FROM users WHERE email = '$email'";
+        return $this->select($sql);
 
     }
 }

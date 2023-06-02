@@ -1,5 +1,7 @@
 <?php 
 require_once 'config/Config.php';
+require_once 'config/Helpers.php';
+
 $route = (!empty($_GET['url'])) ? $_GET['url'] : 'home/index';
 $array = explode('/', $route);
 $controller = ucfirst($array[0]);

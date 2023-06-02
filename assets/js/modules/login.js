@@ -28,7 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
             //Check status
             http.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    console.log(this.responseText);
+                    const response = JSON.parse(this.responseText);
+                    if (response.type = 'success') {
+                        window.location = base_url + 'admin';                        
+                    }
+                    alert(response.msg);
                     
                 }                
             }                        
