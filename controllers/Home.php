@@ -12,15 +12,15 @@ class Home extends Controller{
         $this->views->View('main','login',$data);
     }
 
-    //Validate login form
+    
     public function validate(){
-        if (isset($_POST['emailAddress']) && isset($_POST['password'])) {
-            if (empty($_POST['emailAddress'])) {
+        if (isset($_POST['email']) && isset($_POST['password'])) {
+            if (empty($_POST['email'])) {
                 $response = array('msg' => 'El correo es necesario', 'type' => 'warning');
             }else if (empty($_POST['password'])) {
                 $response = array('msg' => 'La contraseña es necesaria', 'type' => 'warning');                
             }else {
-                $email = strClean($_POST['emailAddress']);
+                $email = strClean($_POST['email']);
                 $password = strClean($_POST['password']);
                 $data = $this->model->getData($email);
                 if (empty($data)) {

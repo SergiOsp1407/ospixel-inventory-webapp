@@ -28,12 +28,12 @@ class Query extends ConnectionDB{
         $data = $result->execute($array);
 
         if ($data) {
-            $res = $this->connection->lastInsertId();
+            $response = $this->connection->lastInsertId();
         } else {
-            $res = 0;
+            $response = 0;
         }
 
-        return $res;
+        return $response;
         
     }
 
@@ -43,12 +43,12 @@ class Query extends ConnectionDB{
         $data = $result->execute($array);
 
         if ($data) {
-            $res = 1;
+            $response = 1;
         } else {
-            $res = 0;
+            $response = 0;
         }
 
-        return $res;
+        return $response;
         
     }
 

@@ -45,14 +45,14 @@
 									<div class="form-body">
 										<form class="row g-3" id="form" method="POST" autocomplete="off">
 											<div class="col-12">
-												<label for="emailAddress" class="form-label">Ingresa tu correo electrónico:</label>
-												<input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Email Address">
+												<label for="email" class="form-label">Ingresa tu correo electrónico:</label>
+												<input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
                                                 <span id="errorEmail" class="text-danger"></span>
 											</div>
 											<div class="col-12">
 												<label for="password" class="form-label">Ingresa tu contraseña:</label>
 												<div class="input-group" id="show_hide_password">
-													<input type="password" class="form-control border-end-0" id="password" name="password" placeholder="Enter Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
+													<input type="password" class="form-control border-end-0" id="password" name="password" placeholder="Enter Password"><a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
 												</div>
                                                 <span id="errorPassword" class="text-danger"></span>
 											</div>
@@ -62,7 +62,7 @@
 													<label class="form-check-label" for="flexSwitchCheckChecked">Recuerdame</label>
 												</div>
 											</div>
-											<div class="col-md-6 text-end">	<a href="authentication-forgot-password.html">¿Olvidaste tu contraseña?</a>
+											<div class="col-md-6 text-end"><a href="authentication-forgot-password.html">¿Olvidaste tu contraseña?</a>
 											</div>
 											<div class="col-12">
 												<div class="d-grid">
