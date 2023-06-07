@@ -1,6 +1,6 @@
 <?php
 class Views{
-    public function View($route, $name, $data = ""){
+    public function getView($route, $name, $data = ""){
 
         if ($route == 'main') {
             $view = 'views/' . $name . '.php';

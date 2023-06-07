@@ -9,7 +9,7 @@ class Home extends Controller{
     public function index(){    
         
         $data['title'] = 'Iniciar Sesion';
-        $this->views->View('main','login',$data);
+        $this->views->getView('main','login',$data);
     }
 
     
@@ -38,7 +38,7 @@ class Home extends Controller{
         }else {
             $response = array('msg' => 'Error desconocido', 'type' => 'error'); 
         }
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
         die();
     }
 }
