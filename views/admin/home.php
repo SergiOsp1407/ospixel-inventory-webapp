@@ -73,6 +73,63 @@
 						<div class="menu-title">Clientes</div>
 					</a>
 				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Proveedores</div>
+					</a>
+				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Cajas/Balances</div>
+					</a>
+				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Compras</div>
+					</a>
+				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Ventas</div>
+					</a>
+				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Administrar creditos</div>
+					</a>
+				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Cotizaciones</div>
+					</a>
+				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Apartados</div>
+					</a>
+				</li>
+				<li>
+					<a href="widgets.html">
+						<div class="parent-icon"><i class='bx bx-cookie'></i>
+						</div>
+						<div class="menu-title">Inventario</div>
+					</a>
+				</li>
+				
 			</ul>
 			<!--end navigation-->
 		</div>
