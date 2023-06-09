@@ -9,6 +9,7 @@ class Admin extends Controller{
     public function index(){    
         
         $data['title'] = 'Panel Administrativo';
+        $data['script'] = 'index.js';
         $this->views->getView('admin','home',$data);
 
     }
