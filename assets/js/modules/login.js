@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
       //Create an instance of XMLHttpRequest
       const http = new XMLHttpRequest();
       //Open connection - POST - GET
-      http.open("POST", url, true);
+      http.open('POST', url, true);
       //Sen data
       http.send(data);
       //Check status

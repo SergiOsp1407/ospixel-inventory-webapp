@@ -31,6 +31,33 @@ class Users extends Controller{
 
     }
 
-   
+    public function register(){
+
+        if (isset($_POST)) {
+
+            if (empty($_POST['names'])) {
+                $res = array('msg' => 'El nombre es requerido');
+            }else if (empty($_POST['lastname'])) {
+                $res = array('msg' => 'El apellido es requerido');
+            }else if (empty($_POST['email'])) {
+                $res = array('msg' => 'El correo es requerido');
+            }else if (empty($_POST['phone'])) {
+                $res = array('msg' => 'El teléfono es requerido');
+            }else if (empty($_POST['address'])) {
+                $res = array('msg' => 'La dirección es requerida');
+            }else if (empty($_POST['password'])) {
+                $res = array('msg' => 'La contraseña es requerida');
+            }else if (empty($_POST['rol'])) {
+                $res = array('msg' => 'El rol es requerido');
+            }else {
+                
+            }
+            
+        }else {
+            
+        }
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        die();                       
+    }   
 }
 ?>
