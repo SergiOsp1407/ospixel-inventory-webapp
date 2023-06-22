@@ -42,6 +42,23 @@ document.addEventListener("DOMContentLoaded", function () {
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
+    const url = base_url + "users/register";
+      //Create formData
+      const data = new FormData(this);
+      //Create an instance of XMLHttpRequest
+      const http = new XMLHttpRequest();
+      //Open connection - POST - GET
+      http.open('POST', url, true);
+      //Sen data
+      http.send(data);
+      //Check status
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            //   const response = JSON.parse(this.responseText);
+            console.log(this.responseText);
+        }
+      };
+      return;
     errorNames.textContent = "";
     errorLastname.textContent = "";
     errorEmail.textContent = "";
@@ -65,22 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (rol.value == "") {
       errorRol.textContent = "El rol es requerido";
     } else {
-      const url = base_url + "users/register";
-      //Create formData
-      const data = new FormData(this);
-      //Create an instance of XMLHttpRequest
-      const http = new XMLHttpRequest();
-      //Open connection - POST - GET
-      http.open('POST', url, true);
-      //Sen data
-      http.send(data);
-      //Check status
-      http.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            //   const response = JSON.parse(this.responseText);
-            console.log(this.responseText);
-        }
-      };
+      
     }
   });
 });

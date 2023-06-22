@@ -36,25 +36,40 @@ class Users extends Controller{
         if (isset($_POST)) {
 
             if (empty($_POST['names'])) {
-                $res = array('msg' => 'El nombre es requerido');
+                $response = array('msg' => 'El nombre es requerido', 'type' => 'warning');
             }else if (empty($_POST['lastname'])) {
-                $res = array('msg' => 'El apellido es requerido');
+                $response = array('msg' => 'El apellido es requerido', 'type' => 'warning');
             }else if (empty($_POST['email'])) {
-                $res = array('msg' => 'El correo es requerido');
+                $response = array('msg' => 'El correo es requerido', 'type' => 'warning');
             }else if (empty($_POST['phone'])) {
-                $res = array('msg' => 'El teléfono es requerido');
+                $response = array('msg' => 'El teléfono es requerido', 'type' => 'warning');
             }else if (empty($_POST['address'])) {
-                $res = array('msg' => 'La dirección es requerida');
+                $response = array('msg' => 'La dirección es requerida', 'type' => 'warning');
             }else if (empty($_POST['password'])) {
-                $res = array('msg' => 'La contraseña es requerida');
+                $response = array('msg' => 'La contraseña es requerida', 'type' => 'warning');
             }else if (empty($_POST['rol'])) {
-                $res = array('msg' => 'El rol es requerido');
+                $response = array('msg' => 'El rol es requerido', 'type' => 'warning');
             }else {
+                $names = strClean($_POST['names']);
+                $lastname = strClean($_POST['lastname']);
+                $email = strClean($_POST['email']);
+                $phone = strClean($_POST['phone']);
+                $address = strClean($_POST['address']);
+                $password = strClean($_POST['password']);
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $rol = strClean($_POST['rol']);
                 
+                $data = $this->model->register($names, $lastname, $email, $phone, $address, $hash, $rol);
+
+                if ($data > 0) {
+                    $response = array('msg' => 'Usuario registrado con éxito', 'type' => 'success');            
+                }else{
+                    $response = array('msg' => 'Error al registrar', 'type' => 'error');            
+                }
             }
             
         }else {
-            
+            $response = array('msg' => 'Error desconocido', 'type' => 'error');            
         }
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         die();                       
