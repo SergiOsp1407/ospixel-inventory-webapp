@@ -12,7 +12,7 @@
             <div class="tab-pane fade show active mt-2" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab" tabindex="0">
                 <h5 class="card-title  text-center"><i class="fa-solid fa-user-group"></i> Listado de usuarios</h5>
                 <hr>
-                <table class="table table-bordered table-striped table-hover" id="tblUsers" style="width: 100%;">
+                <table class="table table-bordered table-striped table-hover nowrap" id="tblUsers" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>Nombres</th>

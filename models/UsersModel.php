@@ -17,5 +17,11 @@ class UsersModel extends Query{
         $array = array($names, $lastname, $email, $phone, $address, $password, $rol);
         return $this->insert($sql, $array);
     }
+
+    public function getValidate($field, $value) {
+        
+        $sql = "SELECT * FROM users WHERE $field = '$value'";
+        return $this->select($sql);
+    }
 }
 ?>
