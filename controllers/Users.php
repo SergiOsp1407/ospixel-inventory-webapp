@@ -27,12 +27,15 @@ class Users extends Controller
                 $data[$i]['rol'] = '<span class="badge bg-info">Empleado</span>';
             }
 
-            $data[$i]['actions'] = '';
+            $data[$i]['actions'] = '<div>
+            <button class="btn btn-danger" type="button" onclick="deleteUser('.$data[$i]['id'].')"><i class="fas fa-times-circle"></i></button>
+            </div>';
         }
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
 
+    //Register and edit users
     public function register()
     {
 
@@ -86,4 +89,29 @@ class Users extends Controller
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         die();
     }
+
+    //Delete users
+    public function delete($id){
+
+        if (isset($_GET)) {
+            if (is_numeric(($id))) {
+                $data = $this->model->delete(0, $id);
+                if ($data == 1) {
+                    $response = array('msg' => 'Usuario desactivado correctamente', 'type' => 'success');
+                } else {
+                    $response = array('msg' => 'Error al desactivar usuario', 'type' => 'error');
+                }
+                
+            }else {
+                $response = array('msg' => 'Error desconocido', 'type' => 'error');
+            }
+        }else {
+            $response = array('msg' => 'Error desconocido', 'type' => 'warning');
+        }
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        die();
+        
+    }
+
+
 }

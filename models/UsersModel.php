@@ -7,7 +7,7 @@ class UsersModel extends Query{
 
     public function getUsers($status){
 
-        $sql = "SELECT CONCAT(name, ' ' ,lastname) AS completeName, email, phone, address, rol FROM users WHERE status = $status";
+        $sql = "SELECT id, CONCAT(name, ' ' ,lastname) AS completeName, email, phone, address, rol FROM users WHERE status = $status";
         return $this->selectAll($sql);
 
     }
@@ -22,6 +22,14 @@ class UsersModel extends Query{
         
         $sql = "SELECT * FROM users WHERE $field = '$value'";
         return $this->select($sql);
+    }
+
+    public function delete($status,$id){
+
+        $sql = "UPDATE users SET status = ? WHERE id = ?";
+        $array = array($status,$id);
+        return $this->save($sql, $array);
+        
     }
 }
 ?>
