@@ -2,6 +2,18 @@
 
 <div class="card">
     <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div>
+            </div>
+            <div class="dropdown ms-auto">
+                <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="<?php echo BASE_URL . 'users/inactives';?>"><i class="fas fa-trash text-danger"></i> Inactivos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-users-tab" data-bs-toggle="tab" data-bs-target="#nav-users" type="button" role="tab" aria-controls="nav-users" aria-selected="true">Usuarios</button>
@@ -33,6 +45,7 @@
             </div>
             <div class="tab-pane fade" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab" tabindex="0">
                 <form class="p-4" id="form" autocomplete="off">
+                    <input type="hidden" id="id" name="id">
                     <div class="row">
                         <div class="col-lg-4 col-sm-6 mb-2">
                             <label>Nombres</label>
@@ -96,6 +109,7 @@
                         </div>
                     </div>
                     <div class="text-end">
+                        <button class="btn btn-danger" type="button" id="btnNew">Nuevo</button>
                         <button class="btn btn-primary" type="submit" id="btnAction">Registrar</button>
                     </div>
                 </form>

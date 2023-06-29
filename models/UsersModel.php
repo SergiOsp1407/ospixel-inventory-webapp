@@ -18,9 +18,12 @@ class UsersModel extends Query{
         return $this->insert($sql, $array);
     }
 
-    public function getValidate($field, $value) {
-        
-        $sql = "SELECT * FROM users WHERE $field = '$value'";
+    public function getValidate($field, $value, $action, $id) {
+        if ($action == 'register' && $id == 0) {
+            $sql = "SELECT id, email, phone FROM users WHERE $field = '$value'";
+        }else {
+            $sql = "SELECT id, email, phone FROM users WHERE $field = '$value' AND id != $id";
+        }
         return $this->select($sql);
     }
 
@@ -30,6 +33,18 @@ class UsersModel extends Query{
         $array = array($status,$id);
         return $this->save($sql, $array);
         
+    }
+
+    public function edit($id) {
+        
+        $sql = "SELECT id,name,lastname,email,phone,address,rol FROM users WHERE id = $id";
+        return $this->select($sql);
+    }
+
+    public function update($names, $lastname, $email, $phone, $address, $rol, $id){
+        $sql = "UPDATE users SET name=?, lastname=?, email=?, phone=?, address=?, rol=? WHERE id=?";
+        $array = array($names, $lastname, $email, $phone, $address, $rol, $id);
+        return $this->save($sql, $array);
     }
 }
 ?>

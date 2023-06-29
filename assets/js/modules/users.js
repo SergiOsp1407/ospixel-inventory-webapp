@@ -7,6 +7,7 @@ const phone = document.querySelector("#phone");
 const address = document.querySelector("#address");
 const password = document.querySelector("#password");
 const rol = document.querySelector("#rol");
+const id = document.querySelector("#id");
 
 //Elements to show errors
 const errorNames = document.querySelector("#errorNames");
@@ -16,6 +17,8 @@ const errorPhone = document.querySelector("#errorPhone");
 const errorAddress = document.querySelector("#errorAddress");
 const errorPassword = document.querySelector("#errorPassword");
 const errorRol = document.querySelector("#errorRol");
+const btnAction = document.querySelector("#btnAction");
+const btnNew = document.querySelector("#btnNew");
 
 document.addEventListener("DOMContentLoaded", function () {
   //Load data with datatables plugin
@@ -41,6 +44,12 @@ document.addEventListener("DOMContentLoaded", function () {
     order: [[0, "asc"]],
   });
 
+  //Clean fields
+  btnNew.addEventListener("click", function () {
+    cleanFields();
+  });
+
+  //Register users
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     errorNames.textContent = "";
@@ -88,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
             timer: 2000,
           });
           if (response.type == "success") {
-            form.reset();
+            cleanFields();
             tblUsers.ajax.reload();
           }
         }
@@ -113,7 +122,7 @@ function deleteUser(idUser) {
       //Create an instance of XMLHttpRequest
       const http = new XMLHttpRequest();
       //Open connection - POST - GET
-      http.open('GET', url, true);
+      http.open("GET", url, true);
       //Sen data
       http.send();
       //Check status
@@ -128,7 +137,7 @@ function deleteUser(idUser) {
             showConfirmButton: false,
             timer: 2000,
           });
-          if (response.type == 'success') {
+          if (response.type == "success") {
             tblUsers.ajax.reload();
           }
         }
@@ -140,4 +149,42 @@ function deleteUser(idUser) {
       // )
     }
   });
+}
+
+//Edit Users function
+function editUser(idUser) {
+  const url = base_url + "users/edit/" + idUser;
+  //Create an instance of XMLHttpRequest
+  const http = new XMLHttpRequest();
+  //Open connection - POST - GET
+  http.open("GET", url, true);
+  //Sen data
+  http.send();
+  //Check status
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const response = JSON.parse(this.responseText);
+      id.value = response.id;
+      names.value = response.name;
+      lastname.value = response.lastname;
+      email.value = response.email;
+      phone.value = response.phone;
+      address.value = response.address;
+      rol.value = response.rol;
+      password.value = "000000";
+      password.setAttribute("readonly", "readonly");
+      btnAction.textContent = "Actualizar";
+      const firstTabEl = document.querySelector("#nav-tab button:last-child");
+      const firstTab = new bootstrap.Tab(firstTabEl);
+      firstTab.show();
+    }
+  };
+}
+
+function cleanFields() {
+  id.value = "";
+  btnAction.textContent = "Registrar";
+  password.removeAttribute("readonly");
+  form.reset();
+  names.focus();
 }
