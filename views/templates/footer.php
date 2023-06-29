@@ -124,6 +124,7 @@
 <script src="<?php echo BASE_URL; ?>assets/DataTables/datatables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/custom-buttons.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/sweetalert2.all.min.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/ckeditor.js"></script>
 <script>
     const base_url = '<?php echo BASE_URL; ?>';
 </script>
