@@ -72,7 +72,7 @@
                         <div class="menu-title">Mantenimiento</div>
                     </a>
                     <ul>
-                        <li> <a href="app-emailbox.html"><i class="bx bx-right-arrow-alt"></i>Medidas/Dimensiones</a>
+                        <li> <a href="<?php echo BASE_URL . 'measures'; ?>"><i class="bx bx-right-arrow-alt"></i>Medidas/Dimensiones</a>
                         </li>
                         <li> <a href="app-chat-box.html"><i class="bx bx-right-arrow-alt"></i>Categorías</a>
                         </li>
