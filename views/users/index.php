@@ -9,7 +9,7 @@
                 <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="<?php echo BASE_URL . 'users/inactives';?>"><i class="fas fa-trash text-danger"></i> Inactivos</a>
+                    <li><a class="dropdown-item" href="<?php echo BASE_URL . 'users/inactives'; ?>"><i class="fas fa-trash text-danger"></i> Inactivos</a>
                     </li>
                 </ul>
             </div>
@@ -24,24 +24,26 @@
             <div class="tab-pane fade show active mt-2" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab" tabindex="0">
                 <h5 class="card-title  text-center"><i class="fa-solid fa-user-group"></i> Listado de usuarios</h5>
                 <hr>
-                <table class="table table-bordered table-striped table-hover nowrap" id="tblUsers" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>Nombres</th>
-                            <th>Correo</th>
-                            <th>Teléfono</th>
-                            <th>Dirección</th>
-                            <th>Rol</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover nowrap" id="tblUsers" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Nombres</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Rol</th>
+                                <th></th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <tr>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab" tabindex="0">
                 <form class="p-4" id="form" autocomplete="off">

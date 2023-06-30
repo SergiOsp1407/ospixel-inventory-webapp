@@ -1,13 +1,13 @@
 <?php include_once 'views/templates/header.php'; ?>
 <div class="card">
     <div class="card-body">
-        <!-- <h5 class="card-title">Información de la empresa</h5>
+        <!-- <h5 class="card-title text-center">Información de la empresa</h5>
         <hr>-->
         <form class="p-4" id="form" autocomplete="off">
             <input type="hidden" id="id" name="id" value="<?php echo $data['company']['id']; ?>">
             <div class="row">
                 <div class="col-lg-4 col-sm-6 mb-2">
-                    <label>NIT</label>
+                    <label>NIT <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
                         <input type="text" id="nit" name="nit" class="form-control" value="<?php echo $data['company']['nit']; ?>" placeholder="NIT">
@@ -15,7 +15,7 @@
                     <span id="errorNit" class="text-danger"></span>
                 </div>
                 <div class="col-lg-4 col-sm-6 mb-2">
-                    <label>Nombre empresa</label>
+                    <label>Nombre empresa <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
                         <input type="text" id="name" name="name" class="form-control" value="<?php echo $data['company']['name']; ?>" placeholder="Nombre empresa">
@@ -23,7 +23,7 @@
                     <span id="errorName" class="text-danger"></span>
                 </div>
                 <div class="col-lg-4 col-sm-6 mb-2">
-                    <label>Teléfono</label>
+                    <label>Teléfono <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                         <input type="number" id="phone" name="phone" class="form-control" value="<?php echo $data['company']['phone']; ?>" placeholder="Teléfono">
@@ -31,7 +31,7 @@
                     <span id="errorPhone" class="text-danger"></span>
                 </div>
                 <div class="col-lg-4 col-sm-6 mb-2">
-                    <label>Correo</label>
+                    <label>Correo <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
                         <input type="email" id="email" name="email" class="form-control" value="<?php echo $data['company']['email']; ?>" placeholder="Correo">
@@ -39,7 +39,7 @@
                     <span id="errorEmail" class="text-danger"></span>
                 </div>
                 <div class="col-lg-8 col-sm-6 mb-2">
-                    <label>Dirección</label>
+                    <label>Dirección <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
                         <input type="text" id="address" name="address" class="form-control" value="<?php echo $data['company']['address']; ?>" placeholder="Dirección">
