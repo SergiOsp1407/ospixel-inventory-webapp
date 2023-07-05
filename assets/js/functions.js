@@ -1,3 +1,6 @@
+const firstTabEl = document.querySelector("#nav-tab button:last-child");
+const firstTab = new bootstrap.Tab(firstTabEl);
+
 function insertRecords(url, idForm, tbl, idButton, action) {
   //Create formData
   const data = new FormData(idForm);
@@ -36,7 +39,7 @@ function insertRecords(url, idForm, tbl, idButton, action) {
 
 function deleteRecords(url, tbl) {
   Swal.fire({
-    title: "Deseas desactivar el usuario?",
+    title: "Deseas eliminar el registro?",
     text: "Esta acción se puede reversar.",
     icon: "warning",
     showCancelButton: true,
@@ -79,7 +82,7 @@ function deleteRecords(url, tbl) {
 
 function restoreRecords(url, tbl) {
   Swal.fire({
-    title: "Deseas activar el usuario?",
+    title: "Deseas activar el registro?",
     text: "Esta acción se puede reversar.",
     icon: "warning",
     showCancelButton: true,
