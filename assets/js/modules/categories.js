@@ -1,22 +1,20 @@
-let tblMeasures;
+let tblCategories;
+
 const form = document.querySelector("#form");
 const id = document.querySelector("#id");
-const measure = document.querySelector("#measure");
-const short_name = document.querySelector("#short_name");
-const errorMeasure = document.querySelector("#errorMeasure");
-const errorShortname = document.querySelector("#errorShortname");
-
+const category = document.querySelector("#category");
+const errorCategory = document.querySelector("#errorCategory");
 const btnAction = document.querySelector("#btnAction");
 const btnNew = document.querySelector("#btnNew");
 
 document.addEventListener("DOMContentLoaded", function () {
   //Load data with datatables plugin
-  tblMeasures = $("#tblMeasures").DataTable({
+  tblCategories = $("#tblCategories").DataTable({
     ajax: {
-      url: base_url + "measures/list",
+      url: base_url + "categories/list",
       dataSrc: "",
     },
-    columns: [{ data: "measure" }, { data: "short_name" }, { data: "actions" }],
+    columns: [{ data: "category" }, { data: "date" }, { data: "actions" }],
     language: {
       url: base_url + "assets/js/spanish.json",
     },
@@ -32,29 +30,26 @@ document.addEventListener("DOMContentLoaded", function () {
     form.reset();    
   });
 
-  //Send data
+  //Create category
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    errorMeasure.textContent = '';
-    errorShortname.textContent = '';
-    if (measure.value == "") {
-      errorMeasure.textContent = "El nombre de la medida es requerido";
-    } else if (short_name.value == "") {
-      errorShortname.textContent = "La abreviación es requerida";
+    errorCategory.textContent = "";
+    if (category.value == "") {
+      errorCategory.textContent = "* El nombre de la categoría es necesario";
     } else {
-      const url = base_url + "measures/register";
-      insertRecords(url, this, tblMeasures, btnAction, false);
+      const url = base_url + "categories/register";
+      insertRecords(url, this, tblCategories, btnAction, false);
     }
   });
 });
 
-function deleteMeasure(idMeasure) {
-  const url = base_url + "measures/delete/" + idMeasure;
-  deleteRecords(url, tblMeasures);
+function deleteCategory(idCategory) {
+  const url = base_url + "categories/delete/" + idCategory;
+  deleteRecords(url, tblCategories);
 }
 
-function editMeasure(idMeasure) {
-  const url = base_url + "measures/edit/" + idMeasure;
+function editCategory(idCategory) {
+  const url = base_url + "categories/edit/" + idCategory;
   //Create an instance of XMLHttpRequest
   const http = new XMLHttpRequest();
   //Open connection - POST - GET
@@ -66,8 +61,7 @@ function editMeasure(idMeasure) {
     if (this.readyState == 4 && this.status == 200) {
       const response = JSON.parse(this.responseText);
       id.value = response.id;
-      measure.value = response.measure;
-      short_name.value = response.short_name;
+      category.value = response.category;
       btnAction.textContent = "Actualizar";
       firstTab.show();
     }
