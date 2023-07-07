@@ -76,7 +76,7 @@
                         </li>
                         <li> <a href="<?php echo BASE_URL . 'categories'; ?>"><i class="bx bx-right-arrow-alt"></i>Categorías</a>
                         </li>
-                        <li> <a href="app-chat-box.html"><i class="bx bx-right-arrow-alt"></i>Productos</a>
+                        <li> <a href="<?php echo BASE_URL . 'products'; ?>"><i class="bx bx-right-arrow-alt"></i>Productos</a>
                         </li>
                     </ul>
                 </li>
