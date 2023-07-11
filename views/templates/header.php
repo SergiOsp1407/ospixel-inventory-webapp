@@ -82,7 +82,7 @@
                 </li>
                 <li class="menu-label">Módulos</li>
                 <li>
-                    <a href="widgets.html">
+                    <a href="<?php echo BASE_URL . 'clients'; ?>">
                         <div class="parent-icon"><i class="fa-solid fa-users-rectangle"></i>
                         </div>
                         <div class="menu-title">Clientes</div>
