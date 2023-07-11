@@ -2,6 +2,18 @@
 
 <div class="card">
     <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div>
+            </div>
+            <div class="dropdown ms-auto">
+                <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="<?php echo BASE_URL . 'products/inactives'; ?>"><i class="fas fa-trash text-danger"></i> Inactivos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-products-tab" data-bs-toggle="tab" data-bs-target="#nav-products" type="button" role="tab" aria-controls="nav-products" aria-selected="true">Productos</button>
@@ -36,6 +48,7 @@
             <div class="tab-pane fade p-3" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab" tabindex="0">
                 <form id="form" autocomplete="off">
                     <input type="hidden" id="id" name="id">
+                    <input type="hidden" id="actual_photo" name="actual_photo">
                     <div class="row mb-3">
                         <div class="col-md-3 mb-3">
                             <label for="code">Código</label>
@@ -98,6 +111,10 @@
                                 <label for="photo">Foto (Opcional)</label>
                                 <input id="photo" class="form-control" type="file" name="photo">
                             </div>
+                            <div id="containerPreview">
+
+                            </div>
+
                         </div>
 
                     </div>

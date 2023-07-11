@@ -35,5 +35,28 @@ class ProductsModel extends Query{
         return $this->select($sql);
     }
 
+    public function delete($status, $idProduct){
+
+        $sql = "UPDATE products SET status = ? WHERE id = ?";
+        $array = array($status, $idProduct);
+        return $this->save($sql, $array);
+        
+    }
+
+    public function edit($idProduct){
+
+        $sql = "SELECT * FROM products WHERE id = $idProduct";
+        return $this->select($sql);
+        
+    }
+
+    public function update($code, $description, $purchase_price, $sale_price, $id_measure, $id_category, $photo, $id) {
+
+        $sql = "UPDATE products SET code=?, description=?, purchase_price=?, sale_price=?, id_measure=?, id_category=?, photo=? WHERE id = ?";
+        $array = array($code, $description, $purchase_price, $sale_price, $id_measure, $id_category, $photo, $id);
+        return $this->save($sql, $array);
+        
+    }
+
 }
 ?>

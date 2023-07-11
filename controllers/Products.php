@@ -21,7 +21,11 @@ class Products extends Controller
 
         $data = $this->model->getProducts(1);
         for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['actions'] = '';
+            $data[$i]['image'] = '<img class="img-thumbnail" src="' . $data[$i]['photo'] . '" width="100">';
+            $data[$i]['actions'] = '<div>
+            <button class="btn btn-danger" type="button" onclick="deleteProduct(' . $data[$i]['id'] . ')" ><i class="fas fa-trash"></i></button>            
+            <button class="btn btn-primary" type="button" onclick="editProduct(' . $data[$i]['id'] . ')" ><i class="fas fa-edit"></i></button>            
+            </div>';
         }
 
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -31,17 +35,26 @@ class Products extends Controller
     public function register()
     {
         if (isset($_POST['code']) && isset($_POST['description'])) {
+            $id = strClean($_POST['id']);
             $code = strClean($_POST['code']);
             $description = strClean($_POST['description']);
             $purchase_price = strClean($_POST['purchase_price']);
             $sale_price = strClean($_POST['sale_price']);
             $id_measure = strClean($_POST['id_measure']);
             $id_category = strClean($_POST['id_category']);
+            $actual_photo = strClean($_POST['actual_photo']);
             $photo = $_FILES['photo'];
             $name = $photo['name'];
             $tmp = $photo['tmp_name'];
-            $date = date('YmdHis');
-            $route = 'assets/images/products/' . $date . '.jpg';
+
+            $route = null;
+            if (!empty($name)) {
+                $date = date('YmdHis');
+                $route = 'assets/images/products/' . $date . '.png';
+            } elseif (!empty($actual_photo) && empty($name)) {
+                $route = $actual_photo;
+            }
+
             if (empty($code)) {
                 $response = array('msg' => 'El código es necesario', 'type' => 'warning');
             } else if (empty($description)) {
@@ -55,17 +68,38 @@ class Products extends Controller
             } else if (empty($id_category)) {
                 $response = array('msg' => 'La categoría es necesaria', 'type' => 'warning');
             } else {
-                $check = $this->model->getValidate('code', $code, 'register', 0);
-                if (empty($check)) {
-                    $data = $this->model->register($code, $description, $purchase_price, $sale_price, $id_measure, $id_category, $route);
+                if ($id == '') {
+                    $check = $this->model->getValidate('code', $code, 'register', 0);
+                    if (empty($check)) {
+                        $data = $this->model->register($code, $description, $purchase_price, $sale_price, $id_measure, $id_category, $route);
 
-                    if ($data > 0) {
-                        $response = array('msg' => 'Producto registrado', 'type' => 'success');
+                        if ($data > 0) {
+                            if (!empty($name)) {
+                                move_uploaded_file($tmp, $route);
+                            }
+                            $response = array('msg' => 'Producto registrado', 'type' => 'success');
+                        } else {
+                            $response = array('msg' => 'Error al registrar el producto', 'type' => 'error');
+                        }
                     } else {
-                        $response = array('msg' => 'Error al registrar el producto', 'type' => 'error');
+                        $response = array('msg' => 'El código debe ser único', 'type' => 'warning');
                     }
                 } else {
-                    $response = array('msg' => 'El código debe ser único', 'type' => 'warning');
+                    $check = $this->model->getValidate('code', $code, 'edit', $id);
+                    if (empty($check)) {
+                        $data = $this->model->update($code, $description, $purchase_price, $sale_price, $id_measure, $id_category, $route, $id);
+
+                        if ($data > 0) {
+                            if (!empty($name)) {
+                                move_uploaded_file($tmp, $route);
+                            }
+                            $response = array('msg' => 'Producto modificado', 'type' => 'success');
+                        } else {
+                            $response = array('msg' => 'Error al modificar el producto', 'type' => 'error');
+                        }
+                    } else {
+                        $response = array('msg' => 'El código debe ser único', 'type' => 'warning');
+                    }
                 }
             }
         } else {
@@ -74,4 +108,71 @@ class Products extends Controller
         echo json_encode($response);
         die();
     }
+
+    public function delete($idProduct)
+    {
+
+        if (isset($_GET) && is_numeric($idProduct)) {
+            $data = $this->model->delete(0, $idProduct);
+            if ($data == 1) {
+                $response = array('msg' => 'Producto eliminado', 'type' => 'success');
+            } else {
+                $response = array('msg' => 'Error al eliminar el producto', 'type' => 'error');
+            }
+        } else {
+            $response = array('msg' => 'Error desconocido', 'type' => 'error');
+        }
+        echo json_encode($response);
+        die();
+    }
+
+    public function edit($idProduct)
+    {
+
+        $data = $this->model->edit($idProduct);
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function inactives()
+    {
+        $data['title'] = 'Productos inactivos';
+        $data['script'] = 'inactive-products.js';
+        $this->views->getView('products', 'inactives', $data);
+    }
+
+
+    public function listInactives()
+    {
+
+        $data = $this->model->getProducts(0);
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['image'] = '<img class="img-thumbnail" src="' . $data[$i]['photo'] . '" width="100">';
+            $data[$i]['actions'] = '<div>
+            <button class="btn btn-success" type="button" onclick="reactivateProduct(' . $data[$i]['id'] . ')" ><i class="fas fa-check-circle"></i></button>            
+            </div>';
+        }
+
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+    }
+
+    public function reactivate($idProduct)
+    {
+
+        if (isset($_GET) && is_numeric($idProduct)) {
+            $data = $this->model->delete(1, $idProduct);
+            if ($data == 1) {
+                $response = array('msg' => 'Producto reactivado', 'type' => 'success');
+            } else {
+                $response = array('msg' => 'Error al reactivar el producto', 'type' => 'error');
+            }
+        } else {
+            $response = array('msg' => 'Error desconocido', 'type' => 'error');
+        }
+        echo json_encode($response);
+        die();
+    }
+
+
 }

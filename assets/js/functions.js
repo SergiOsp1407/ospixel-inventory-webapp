@@ -117,3 +117,14 @@ function restoreRecords(url, tbl) {
     }
   });
 }
+
+function customAlert(type, msg) {
+  Swal.fire({
+    toast: true,
+    position: "top-right",
+    icon: type,
+    title: msg,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+}
