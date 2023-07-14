@@ -72,23 +72,18 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   //Clean fields
-  btnNew.addEventListener('click', function() {
-    id.value = '';
-    btnAction.textContent = 'Registrar';
-    form.reset();    
+  btnNew.addEventListener("click", function () {
+    id.value = "";
+    btnAction.textContent = "Registrar";
+    form.reset();
     deleteImg();
+    cleanFields();
   });
 
   //Register products
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    errorCode.textContent = "";
-    errorDescription.textContent = "";
-    errorPurchasePrice.textContent = "";
-    errorSalePrice.textContent = "";
-    errorMeasure.textContent = "";
-    errorCategory.textContent = "";
-
+    cleanFields();
     if (code.value == "") {
       errorCode.textContent = "El código es necesario";
     } else if (description.value == "") {
@@ -121,6 +116,7 @@ function deleteProduct(idProduct) {
 }
 
 function editProduct(idProduct) {
+  cleanFields();
   const url = base_url + "products/edit/" + idProduct;
   //Create an instance of XMLHttpRequest
   const http = new XMLHttpRequest();
@@ -141,11 +137,22 @@ function editProduct(idProduct) {
       id_category.value = response.id_category;
       actual_photo.value = response.photo;
       containerPreview.innerHTML = `
-        <img class="img-thumbnail" src="${base_url + response.photo}" width="200">
+        <img class="img-thumbnail" src="${
+          base_url + response.photo
+        }" width="200">
         <button class="btn btn-danger" type="button" onclick="deleteImg()"><i class="fas fa-trash"></i></button>
       `;
       btnAction.textContent = "Actualizar";
       firstTab.show();
     }
   };
+}
+
+function cleanFields() {
+  errorCode.textContent = "";
+  errorDescription.textContent = "";
+  errorPurchasePrice.textContent = "";
+  errorSalePrice.textContent = "";
+  errorMeasure.textContent = "";
+  errorCategory.textContent = "";
 }

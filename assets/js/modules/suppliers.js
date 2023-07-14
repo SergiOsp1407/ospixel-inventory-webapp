@@ -1,33 +1,31 @@
-let tblClients, editAddress;
+let tblSuppliers, editAddress;
 
 const form = document.querySelector("#form");
 const btnAction = document.querySelector("#btnAction");
 const btnNew = document.querySelector("#btnNew");
 
-const identity_type = document.querySelector("#identity_type");
-const client_identity = document.querySelector("#client_identity");
+const nit = document.querySelector("#nit");
 const name = document.querySelector("#name");
 const phone = document.querySelector("#phone");
 const email = document.querySelector("#email");
 const address = document.querySelector("#address");
 const id = document.querySelector("#id");
 
-const errorIdentityType = document.querySelector("#errorIdentityType");
-const errorClientIdentity = document.querySelector("#errorClientIdentity");
-const errorClientName = document.querySelector("#errorClientName");
+const errorNit = document.querySelector("#errorNit");
+const errorSupplierName = document.querySelector("#errorSupplierName");
 const errorPhone = document.querySelector("#errorPhone");
+const errorEmail = document.querySelector("#errorEmail");
 const errorAddress = document.querySelector("#errorAddress");
 
 document.addEventListener("DOMContentLoaded", function () {
   //Load data with datatables plugin
-  tblClients = $("#tblClients").DataTable({
+  tblSuppliers = $("#tblSuppliers").DataTable({
     ajax: {
-      url: base_url + "clients/list",
+      url: base_url + "suppliers/list",
       dataSrc: "",
     },
     columns: [
-      { data: "identity_type" },
-      { data: "client_identity" },
+      { data: "nit" },
       { data: "name" },
       { data: "phone" },
       { data: "email" },
@@ -85,36 +83,37 @@ document.addEventListener("DOMContentLoaded", function () {
     cleanFields();
   });
 
-  //Register clients
+  //Register suppliers
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     cleanFields();
-    if (identity_type.value == "") {
-      errorIdentityType.textContent = "El tipo de identificación es requerido";
-    } else if (client_identity.value == "") {
-      errorClientIdentity.textContent =
-        "El número de identificación es requerido";
+
+    if (nit.value == "") {
+      errorNit.textContent = "El NIT es requerido";
     } else if (name.value == "") {
-      errorClientName.textContent = "El nombre del cliente es requerido";
+      errorSupplierName.textContent = "El nombre del proveedor es requerido";
     } else if (phone.value == "") {
-      errorPhone.textContent = "El teléfono del cliente es requerido";
+      errorPhone.textContent = "El teléfono del proveedor es requerido";
+    } else if (email.value == "") {
+      errorEmail.textContent =
+        "El correo electrónico del proveedor es requerido";
     } else if (address.value == "") {
-      errorAddress.textContent = "La dirección del cliente es requerida";
+      errorAddress.textContent = "La dirección del proveedor es requerida";
     } else {
-      const url = base_url + "clients/register";
-      insertRecords(url, this, tblClients, btnAction, false);
+      const url = base_url + "suppliers/register";
+      insertRecords(url, this, tblSuppliers, btnAction, false);
     }
   });
 });
 
-function deleteClient(idClient) {
-  const url = base_url + "clients/delete/" + idClient;
-  deleteRecords(url, tblClients);
+function deleteSupplier(idSupplier) {
+  const url = base_url + "suppliers/delete/" + idSupplier;
+  deleteRecords(url, tblSuppliers);
 }
 
-function editClient(idClient) {
+function editSupplier(idSupplier) {
   cleanFields();
-  const url = base_url + "clients/edit/" + idClient;
+  const url = base_url + "suppliers/edit/" + idSupplier;
   //Create an instance of XMLHttpRequest
   const http = new XMLHttpRequest();
   //Open connection - POST - GET
@@ -126,8 +125,7 @@ function editClient(idClient) {
     if (this.readyState == 4 && this.status == 200) {
       const response = JSON.parse(this.responseText);
       id.value = response.id;
-      identity_type.value = response.identity_type;
-      client_identity.value = response.client_identity;
+      nit.value = response.nit;
       name.value = response.name;
       phone.value = response.phone;
       email.value = response.email;
@@ -139,9 +137,8 @@ function editClient(idClient) {
 }
 
 function cleanFields() {
-  errorIdentityType.textContent = "";
-  errorClientIdentity.textContent = "";
-  errorClientName.textContent = "";
+  errorNit.textContent = "";
+  errorSupplierName.textContent = "";
   errorPhone.textContent = "";
   errorEmail.textContent = "";
   errorAddress.textContent = "";

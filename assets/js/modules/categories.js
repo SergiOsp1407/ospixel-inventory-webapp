@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   btnNew.addEventListener('click', function() {
     id.value = '';
+    errorCategory.textContent = "";
     btnAction.textContent = 'Registrar';
     form.reset();    
   });
@@ -49,6 +50,7 @@ function deleteCategory(idCategory) {
 }
 
 function editCategory(idCategory) {
+  errorCategory.textContent = "";
   const url = base_url + "categories/edit/" + idCategory;
   //Create an instance of XMLHttpRequest
   const http = new XMLHttpRequest();

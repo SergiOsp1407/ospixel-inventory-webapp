@@ -26,17 +26,19 @@ document.addEventListener("DOMContentLoaded", function () {
     order: [[0, "asc"]],
   });
 
-  btnNew.addEventListener('click', function() {
-    id.value = '';
-    btnAction.textContent = 'Registrar';
-    form.reset();    
+  btnNew.addEventListener("click", function () {
+    id.value = "";
+    errorMeasure.textContent = "";
+    errorShortname.textContent = "";
+    btnAction.textContent = "Registrar";
+    form.reset();
   });
 
-  //Send data
+  //Create measure/dimension
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    errorMeasure.textContent = '';
-    errorShortname.textContent = '';
+    errorMeasure.textContent = "";
+    errorShortname.textContent = "";
     if (measure.value == "") {
       errorMeasure.textContent = "El nombre de la medida es requerido";
     } else if (short_name.value == "") {
@@ -54,6 +56,8 @@ function deleteMeasure(idMeasure) {
 }
 
 function editMeasure(idMeasure) {
+  errorMeasure.textContent = "";
+  errorShortname.textContent = "";
   const url = base_url + "measures/edit/" + idMeasure;
   //Create an instance of XMLHttpRequest
   const http = new XMLHttpRequest();

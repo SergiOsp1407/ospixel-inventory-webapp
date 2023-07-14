@@ -46,20 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //Clean fields
   btnNew.addEventListener("click", function () {
+    id.value = "";
+    btnAction.textContent = "Registrar";
+    password.removeAttribute("readonly");
+    form.reset();
+    names.focus();
     cleanFields();
   });
 
   //Register users
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    errorNames.textContent = "";
-    errorLastname.textContent = "";
-    errorEmail.textContent = "";
-    errorPhone.textContent = "";
-    errorAddress.textContent = "";
-    errorPassword.textContent = "";
-    errorRol.textContent = "";
-
+    cleanFields();
     if (names.value == "") {
       errorNames.textContent = "El nombre es requerido";
     } else if (lastname.value == "") {
@@ -82,13 +80,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //Delete Users function
-function deleteUser(idUser) {  
+function deleteUser(idUser) {
   const url = base_url + "users/delete/" + idUser;
   deleteRecords(url, tblUsers);
 }
 
 //Edit Users function
 function editUser(idUser) {
+  cleanFields();
   const url = base_url + "users/edit/" + idUser;
   //Create an instance of XMLHttpRequest
   const http = new XMLHttpRequest();
@@ -118,9 +117,11 @@ function editUser(idUser) {
 }
 
 function cleanFields() {
-  id.value = "";
-  btnAction.textContent = "Registrar";
-  password.removeAttribute("readonly");
-  form.reset();
-  names.focus();
+  errorNames.textContent = "";
+  errorLastname.textContent = "";
+  errorEmail.textContent = "";
+  errorPhone.textContent = "";
+  errorAddress.textContent = "";
+  errorPassword.textContent = "";
+  errorRol.textContent = "";
 }
