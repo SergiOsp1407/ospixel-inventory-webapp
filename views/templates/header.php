@@ -103,7 +103,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="widgets.html">
+                    <a href="<?php echo BASE_URL . 'purchases'; ?>">
                         <div class="parent-icon"><i class="fa-solid fa-dolly"></i>
                         </div>
                         <div class="menu-title">Compras</div>
