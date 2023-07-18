@@ -58,5 +58,19 @@ class ProductsModel extends Query{
         
     }
 
+    public function searchCode($value) {
+
+        $sql = "SELECT id FROM products WHERE code = '$value'";
+        return $this->select($sql);
+        
+    }
+    
+    public function searchByName($value) {
+
+        $sql = "SELECT id, description FROM products WHERE description LIKE '%".$value."%' LIMIT 10";
+        return $this->selectAll($sql);
+        
+    }
+
 }
 ?>

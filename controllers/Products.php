@@ -174,5 +174,55 @@ class Products extends Controller
         die();
     }
 
+    // Search Products using the code
+    public function searchCode($value) {
+        
+        $data = $this->model->searchCode($value);
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+        
+    }
+
+    //Search products using the product name
+    public function searchByName() {
+        
+        $array = array();
+        $value = $_GET['term'];
+        $data = $this->model->searchByName($value);
+        foreach ($data as $row) {
+            $result['id'] = $row['id'];
+            $result['label'] = $row['description'];
+            array_push($array, $result);
+        }
+        echo json_encode($array, JSON_UNESCAPED_UNICODE);
+        die();
+        
+    }
+
+    //Show products from localStorage
+    public function showData(){
+        
+        $json = file_get_contents('php://input');
+        $dataSet = json_decode($json, true);
+        $array['products'] = array();
+        $total = 0;
+        if (!empty($dataSet)) {
+            foreach ($dataSet as $product) {
+                $result = $this->model->edit($product['id']);
+                $data['id'] = $result['id'];
+                $data['description'] = $result['description'];
+                $data['purchase_price'] = $result['purchase_price'];
+                $data['quantity'] = $product['quantity'];
+                $subTotal = $result['purchase_price'] * $product['quantity'];
+                $data['subTotal'] = number_format($subTotal, 2);
+                array_push($array['products'], $data);
+                $total += $subTotal;
+            }
+            $array['total'] = number_format($total, 2);
+            echo json_encode($array, JSON_UNESCAPED_UNICODE);
+            die();
+        }
+    }
+
 
 }

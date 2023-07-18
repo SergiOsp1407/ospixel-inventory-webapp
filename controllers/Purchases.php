@@ -6,6 +6,7 @@ class Purchases extends Controller{
 
     public function index() {
         $data['title'] = 'Purchases';
+        $data['script'] = 'purchases.js';
         $this->views->getView('purchases', 'index', $data);
         
     }

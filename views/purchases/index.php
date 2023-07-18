@@ -14,16 +14,22 @@
                 <hr>
                 <div class="btn-group btn-group-toggle mb-2" data-toggle="buttons">
                     <label class="btn btn-dark">
-                        <input type="radio" hidden><i class="fas fa-barcode"></i> Código de barras
+                        <input type="radio" id="barCode" hidden name="searchProduct" checked><i class="fas fa-barcode"></i> Código de barras
                     </label>
                     <label class="btn btn-info">
-                        <input type="radio" hidden><i class="fas fa-list"></i> Nombre
+                        <input type="radio" id="description" hidden name="searchProduct"><i class="fas fa-list"></i> Nombre
                     </label>
                 </div>
-                <!-- Input for search -->
-                <div class="input-group mb-2">
+                <!-- Input to search by code -->
+                <div class="input-group d-none mb-2" id="containerCode">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
-                    <input class="form-control" type="text" id="searchProduct" placeholder="Buscar producto" aria-describedby="my-addon">
+                    <input class="form-control" type="text" id="searchByProductCode" placeholder="Ingresar código de producto" aria-describedby="my-addon">
+                </div>
+
+                <!-- Input to search by name -->
+                <div class="input-group mb-2" id="containerName">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input class="form-control" type="text" id="searchByProductName" placeholder="Ingresar nombre del producto" aria-describedby="my-addon">
                 </div>
 
                 <!-- Products table -->
@@ -36,7 +42,7 @@
                             <th>Subtotal</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody>                      
                     </tbody>
                 </table>
 
