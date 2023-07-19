@@ -27,6 +27,7 @@ class Home extends Controller{
                     $response = array('msg' => 'El correo no existe', 'type' => 'warning');                
                 }else {
                     if (password_verify($password, $data['password'] )) {
+                        $_SESSION['id_user'] = $data['id'];                        
                         $_SESSION['name_user'] = $data['name'];                        
                         $_SESSION['email_user'] = $data['email'];
                         $response = array('msg' => 'Datos correctos', 'type' => 'success'); 

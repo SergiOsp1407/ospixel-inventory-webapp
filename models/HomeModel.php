@@ -7,7 +7,7 @@ class HomeModel extends Query{
 
     public function getData($email){
 
-        $sql = "SELECT name, email, password FROM users WHERE email = '$email'";
+        $sql = "SELECT id, name, email, password FROM users WHERE email = '$email'";
         return $this->select($sql);
 
     }

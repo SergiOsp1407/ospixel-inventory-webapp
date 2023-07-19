@@ -32,26 +32,31 @@
                     <input class="form-control" type="text" id="searchByProductName" placeholder="Ingresar nombre del producto" aria-describedby="my-addon">
                 </div>
 
-                <!-- Products table -->
-                <table class="table table-bordered table-striped table-hover" id="tblNewPurchase" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>                      
-                    </tbody>
-                </table>
-
+                <div class="table-responsive">
+                    <!-- Products table -->
+                    <table class="table table-bordered table-striped table-hover align-middle" id="tblNewPurchase" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                
+                
                 <hr>
 
                 <div class="d-flex justify-content-between">
                     <div class="col-md-4">
                         <label>Buscar proveedor</label>
                         <div class="input-group mb-2">
+                            <input type="hidden" id="idSupplier">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                             <input class="form-control" type="text" id="searchSupplier" placeholder="Buscar proveedor">
                         </div>
@@ -64,7 +69,7 @@
 
                         <label>Dirección</label>
                         <ul class="list-group">
-                            <li class="list-group-item"><i class="fas fa-home"></i></span></li>
+                            <li class="list-group-item" id="address"><i class="fas fa-home"></i></li>
                         </ul>
                     </div>
 
@@ -72,7 +77,7 @@
                         <label>Comprador</label>
                         <div class="input-group mb-2">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input class="form-control" type="text" placeholder="Comprador" disabled>
+                            <input class="form-control" type="text" value="<?php echo $_SESSION['name_user'];?>" placeholder="Comprador" disabled>
                         </div>
 
                         <label>Total a pagar</label>
@@ -87,7 +92,7 @@
                             <input class="form-control" type="text" id="serie" placeholder="Serie compra">
                         </div>
                         <div class="d-grid">
-                            <button class="btn btn-success" type="button">Generar compra</button>
+                            <button class="btn btn-success" type="button" id="btnAction">Generar compra</button>
                         </div>
                     </div>
                 </div>

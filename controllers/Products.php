@@ -175,17 +175,18 @@ class Products extends Controller
     }
 
     // Search Products using the code
-    public function searchCode($value) {
-        
-        $data = $this->model->searchCode($value);
+    public function searchByCode($value)
+    {
+
+        $data = $this->model->searchByCode($value);
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
-        
     }
 
     //Search products using the product name
-    public function searchByName() {
-        
+    public function searchByName()
+    {
+
         $array = array();
         $value = $_GET['term'];
         $data = $this->model->searchByName($value);
@@ -196,12 +197,12 @@ class Products extends Controller
         }
         echo json_encode($array, JSON_UNESCAPED_UNICODE);
         die();
-        
     }
 
     //Show products from localStorage
-    public function showData(){
-        
+    public function showData()
+    {
+
         $json = file_get_contents('php://input');
         $dataSet = json_decode($json, true);
         $array['products'] = array();
@@ -218,11 +219,9 @@ class Products extends Controller
                 array_push($array['products'], $data);
                 $total += $subTotal;
             }
-            $array['total'] = number_format($total, 2);
-            echo json_encode($array, JSON_UNESCAPED_UNICODE);
-            die();
         }
+        $array['total'] = number_format($total, 2);
+        echo json_encode($array, JSON_UNESCAPED_UNICODE);
+        die();
     }
-
-
 }

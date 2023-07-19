@@ -50,5 +50,12 @@ class SuppliersModel extends Query{
         return $this->save($sql, $array);
         
     }
+
+    public function searchByName($value) {
+
+        $sql = "SELECT id, name, phone, address FROM suppliers WHERE name LIKE '%".$value."%' AND status = 1 LIMIT 10";
+        return $this->selectAll($sql);
+        
+    }
 }
 ?>
