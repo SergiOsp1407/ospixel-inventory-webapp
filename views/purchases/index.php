@@ -48,8 +48,8 @@
                         </tbody>
                     </table>
                 </div>
-                
-                
+
+
                 <hr>
 
                 <div class="d-flex justify-content-between">
@@ -77,7 +77,7 @@
                         <label>Comprador</label>
                         <div class="input-group mb-2">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input class="form-control" type="text" value="<?php echo $_SESSION['name_user'];?>" placeholder="Comprador" disabled>
+                            <input class="form-control" type="text" value="<?php echo $_SESSION['name_user']; ?>" placeholder="Comprador" disabled>
                         </div>
 
                         <label>Total a pagar</label>
@@ -98,7 +98,34 @@
                 </div>
             </div>
             <div class="tab-pane fade p-3" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab" tabindex="0">
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="form-group">
+                        <label for="from">Desde</label>
+                        <input id="from" class="form-control" type="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="until">Hasta</label>
+                        <input id="until" class="form-control" type="date">
+                    </div>
+                </div>
 
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle nowrap" id="tblHistory" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th> <!-- date -->
+                                <th>Hora</th> <!-- time -->
+                                <th>Total</th> <!-- total -->
+                                <th>Proveedor</th> <!-- id_supplier -->
+                                <th>Serie</th> <!-- serie -->
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
     </div>

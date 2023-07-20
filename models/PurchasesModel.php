@@ -32,5 +32,26 @@ class PurchasesModel extends Query{
         return $this->select($sql);
         
     }
+
+    //Update stock
+    public function updateStock($quantity, $idProduct) {
+        $sql = "UPDATE products SET quantity = ? WHERE id = ?";
+        $array = array($quantity, $idProduct);
+        return $this->save($sql, $array);
+    }
+
+    //Get historic of purchases
+    public function getPurchases() {
+
+        $sql = "SELECT c.*, p.name FROM purchases c INNER JOIN suppliers p ON c.id_supplier = p.id";
+        return $this->selectAll($sql);
+        
+    }
+
+    public function cancel($idPurchase) {
+        $sql = "UPDATE purchases SET status = ? WHERE id = ?";
+        $array = array(0, $idPurchase);
+        return $this->save($sql, $array);
+    }
 }
 ?>

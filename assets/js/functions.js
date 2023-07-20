@@ -39,7 +39,7 @@ function insertRecords(url, idForm, tbl, idButton, action) {
 
 function deleteRecords(url, tbl) {
   Swal.fire({
-    title: "Deseas eliminar el registro?",
+    title: "¿Deseas eliminar el registro?",
     text: "Esta acción se puede reversar.",
     icon: "warning",
     showCancelButton: true,
@@ -82,7 +82,7 @@ function deleteRecords(url, tbl) {
 
 function restoreRecords(url, tbl) {
   Swal.fire({
-    title: "Deseas activar el registro?",
+    title: "¿Deseas activar el registro?",
     text: "Esta acción se puede reversar.",
     icon: "warning",
     showCancelButton: true,

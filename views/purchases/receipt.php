@@ -37,7 +37,7 @@
             <?php
             $products = json_decode($data['purchase']['products'], true);
             foreach ($products as $product) { ?>
-                <tr>
+                <tr class="products-tr">
                     <td><?php echo $product['quantity']; ?></td>
                     <td><?php echo $product['description']; ?></td>
                     <td><?php echo number_format($product['price'], 2); ?></td>
@@ -46,12 +46,17 @@
             <?php } ?>
             <tr>
                 <td class="text-right" colspan="3">Total</td>
-                <td><?php echo number_format($data['purchase']['total'], 2); ?></td>
+                <td class="text-left"><?php echo number_format($data['purchase']['total'], 2); ?></td>
             </tr>
         </tbody>
     </table>
     <div class="message">
         <?php echo $data['company']['message']; ?>
+    </div>
+    <div class="cancelPurchase">
+        <?php if($data['purchase']['status'] == 0) {?>
+            <h1>Compra anulada</h1>
+        <?php } ?>
     </div>
 </body>
 

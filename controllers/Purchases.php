@@ -56,11 +56,15 @@ class Purchases extends Controller
                     $subTotal = $result['purchase_price'] * $product['quantity'];
                     array_push($array['products'], $data);
                     $total += $subTotal;
+
+                    //Update stock
+                    $newQuantity = $result['quantity'] + $product['quantity'];
+                    $this->model->updateStock($newQuantity, $result['id']);
                 }
                 $productsData = json_encode($array['products']);
-                $data = $this->model->registerPurchase($productsData, $total, $date, $time, $serie, $idSupplier, $this->id_user);
-                if ($data > 0) {
-                    $response = array('msg' => 'Compra realizada', 'type' => 'success');
+                $purchase = $this->model->registerPurchase($productsData, $total, $date, $time, $serie, $idSupplier, $this->id_user);
+                if ($purchase > 0) {
+                    $response = array('msg' => 'Compra realizada', 'type' => 'success', 'idPurchase' => $purchase);
                 } else {
                     $response = array('msg' => 'Error al generar la compra', 'type' => 'error');
                 }
@@ -83,6 +87,12 @@ class Purchases extends Controller
         $data['title'] = 'Reporte';
         $data['company'] = $this->model->getCompany();
         $data['purchase'] = $this->model->getPurchase($idPurchase);
+
+        //Condition for 'Page not found' error
+        if (empty($data['purchase'])) {
+            echo 'Pagina no encontrada';
+            exit;
+        }
         $this->views->getView('purchases', $type, $data);
         $html = ob_get_clean();
 
@@ -99,7 +109,7 @@ class Purchases extends Controller
         // $dompdf->setPaper('letter', 'portrait');
         if ($type == 'receipt') {
             $dompdf->setPaper(array(0, 0, 500, 700), 'portrait');
-        }else{
+        } else {
             $dompdf->setPaper('A4', 'vertical');
         }
 
@@ -108,6 +118,53 @@ class Purchases extends Controller
 
         // Output the generated PDF to Browser
         $dompdf->stream('receipt.pdf', array('Attachment' => false));
+    }
+
+    //Historic purchases
+    public function list()
+    {
+        $data = $this->model->getPurchases();
+        for ($i = 0; $i < count($data); $i++) {
+            if ($data[$i]['status'] == 1) {
+                $data[$i]['actions'] = '<div>
+                <a class="btn btn-warning" href="#" onclick="cancelPurchase(' . $data[$i]['id'] . ')"><i class="fas fa-trash"></i></a>            
+                <a class="btn btn-danger" href="#" onclick="viewReport(' . $data[$i]['id'] . ')"><i class="fas fa-file-pdf"></i></a>            
+                </div>';
+            }else {                
+                $data[$i]['actions'] = '<div>
+                <span class="badge bg-dark">Anulado</span>
+                <a class="btn btn-danger" href="#" onclick="viewReport(' . $data[$i]['id'] . ')"><i class="fas fa-file-pdf"></i></a>            
+                </div>';
+            }
+        }
+        echo json_encode($data);
+        die();
+    }
+
+    //Function to update stock after cancel the purchase
+    public function cancel($idPurchase)
+    {
+
+        if (isset($_GET) && is_numeric($idPurchase)) {
+            $data = $this->model->cancel($idPurchase);
+            if ($data == 1) {
+                $resultPurchase = $this->model->getPurchase($idPurchase);
+                $purchaseProduct = json_decode($resultPurchase['products'], true);
+                foreach ($purchaseProduct as $product) {
+                    $result = $this->model->getProduct($product['id']);
+                    //Update stock
+                    $newQuantity = $result['quantity'] - $product['quantity'];
+                    $this->model->updateStock($newQuantity, $product['id']);
+                }
+                $response = array('msg' => 'Compra anulada', 'type' => 'success');
+            } else {
+                $response = array('msg' => 'Error al anular la compra', 'type' => 'error');
+            }
+        } else {
+            $response = array('msg' => 'Error desconocido', 'type' => 'error');
+        }
+        echo json_encode($response);
+        die();
     }
 
     function generate_numbers($start, $count, $digits)

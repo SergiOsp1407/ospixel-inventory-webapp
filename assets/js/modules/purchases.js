@@ -16,7 +16,10 @@ const idSupplier = document.querySelector("#idSupplier");
 
 const btnAction = document.querySelector("#btnAction");
 
-let listShoppingCart;
+const from = document.querySelector("#from");
+const until = document.querySelector("#until");
+
+let listShoppingCart, tblHistory;
 
 document.addEventListener("DOMContentLoaded", function () {
   //Check products on localStorage
@@ -102,10 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (files < 2) {
       customAlert("warning", "Carrito vacío");
       return;
-    } else if (
-      idSupplier.value == "" &&
-      supplierPhone.value == ""
-    ) {
+    } else if (idSupplier.value == "" && supplierPhone.value == "") {
       customAlert("warning", "El proveedor es necesario");
       return;
     } else if (serie.value == "") {
@@ -131,16 +131,82 @@ document.addEventListener("DOMContentLoaded", function () {
           const response = JSON.parse(this.responseText);
           console.log(this.responseText);
           customAlert(response.type, response.msg);
-          if (response.type == 'success') {
-            localStorage.removeItem('posPurchase');
+          if (response.type == "success") {
+            localStorage.removeItem("posPurchase");
             setTimeout(() => {
-              window.location.reload();
-              // window.open('route, _blank');
+              Swal.fire({
+                title: "¿Desea generar el reporte?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Recibo",
+                denyButtonText: `Factura`,
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  const route =
+                    base_url +
+                    "purchases/report/receipt/" +
+                    response.idPurchase;
+                  window.open(route, "_blank");
+                } else if (result.isDenied) {
+                  const route =
+                    base_url +
+                    "purchases/report/invoice/" +
+                    response.idPurchase;
+                  window.open(route, "_blank");
+                }
+                window.location.reload();
+              });
             }, 2000);
-            
           }
         }
       };
+    }
+  });
+
+  //Show purchases historial
+  //Load data with datatables plugin
+  tblHistory = $("#tblHistory").DataTable({
+    ajax: {
+      url: base_url + "purchases/list",
+      dataSrc: "",
+    },
+    columns: [
+      { data: "date" },
+      { data: "time" },
+      { data: "total" },
+      { data: "name" },
+      { data: "serie" },
+      { data: "actions" },
+    ],
+    language: {
+      url: base_url + "assets/js/spanish.json",
+    },
+    dom,
+    buttons,
+    responsive: true,
+    order: [[0, "asc"]],
+  });
+
+  //Filter by date ranges
+  from.addEventListener("change", function () {
+    tblHistory.draw();
+  });
+  until.addEventListener("change", function () {
+    tblHistory.draw();
+  });
+
+  //Function to create filters in date , in order to show purchases history
+  $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+    var FilterStart = from.value;
+    var FilterEnd = until.value;
+    var DataTableStart = data[0].trim();
+    var DataTableEnd = data[0].trim();
+    if (FilterStart == "" || FilterEnd == "") {
+      return true;
+    }
+    if (DataTableStart >= FilterStart && DataTableEnd <= FilterEnd) {
+      return true;
     }
   });
 });
@@ -279,4 +345,60 @@ function changeQuantity(idProduct, quantity) {
   }
   localStorage.setItem("posPurchase", JSON.stringify(listShoppingCart));
   showProducts();
+}
+
+function viewReport(idPurchase) {
+  Swal.fire({
+    title: "¿Desea generar el reporte?",
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: "Recibo",
+    denyButtonText: `Factura`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      const route = base_url + "purchases/report/receipt/" + idPurchase;
+      window.open(route, "_blank");
+    } else if (result.isDenied) {
+      const route = base_url + "purchases/report/invoice/" + idPurchase;
+      window.open(route, "_blank");
+    }
+  });
+}
+
+function cancelPurchase(idPurchase) {
+  Swal.fire({
+    title: "¿Deseas eliminar el registro?",
+    text: "El stock de los productos se reintegrará",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, eliminalo!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "purchases/cancel/" + idPurchase;
+      //Create an instance of XMLHttpRequest
+      const http = new XMLHttpRequest();
+      //Open connection - POST - GET
+      http.open("GET", url, true);
+      //Sen data
+      http.send();
+      //Check status
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const response = JSON.parse(this.responseText);
+          customAlert(response.type, response.msg);
+          if (response.type == "success") {
+            tblHistory.ajax.reload();
+          }
+        }
+      };
+      // Swal.fire(
+      //   'Deleted!',
+      //   'Your file has been deleted.',
+      //   'success'
+      // )
+    }
+  });
 }

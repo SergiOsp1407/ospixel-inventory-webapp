@@ -82,7 +82,7 @@
 
 
             foreach ($products as $product) { ?>
-                <tr>
+                <tr class="products-tr">
                     <td><?php echo $product['quantity']; ?></td>
                     <td><?php echo $product['description']; ?></td>
                     <td><?php echo number_format($product['price'], 2); ?></td>
@@ -91,21 +91,27 @@
             <?php } ?>
             <tr class="total">
                 <td class="text-right" colspan="3">Subtotal</td>
-                <td><?php echo number_format($subtotal, 2); ?></td>
+                <td class="text-left"><?php echo number_format($subtotal, 2); ?></td>
             </tr>
             <tr class="total">
                 <td class="text-right" colspan="3">IVA 19%</td>
-                <td><?php echo number_format($taxes, 2); ?></td>
+                <td class="text-left"><?php echo number_format($taxes, 2); ?></td>
             </tr>
             <tr class="total">
                 <td class="text-right" colspan="3">Total</td>
-                <td><?php echo number_format($total, 2); ?></td>
+                <td class="text-left"><?php echo number_format($total, 2); ?></td>
             </tr>
 
         </tbody>
     </table>
     <div class="message">
         <?php echo $data['company']['message']; ?>
+    </div>
+
+    <div class="cancelPurchase">
+        <?php if($data['purchase']['status'] == 0) {?>
+            <h1>Compra anulada</h1>
+        <?php } ?>
     </div>
 </body>
 
