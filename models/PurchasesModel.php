@@ -18,5 +18,19 @@ class PurchasesModel extends Query{
         return $this->insert($sql, $array);
         
     }
+
+    public function getCompany() {
+
+        $sql = "SELECT * FROM configuration";
+        return $this->select($sql);
+        
+    }
+
+    public function getPurchase($idPurchase) {
+
+        $sql = "SELECT c.*, p.nit, p.name, p.phone, p.address FROM purchases c INNER JOIN suppliers p ON c.id_supplier = p.id WHERE c.id = $idPurchase";
+        return $this->select($sql);
+        
+    }
 }
 ?>

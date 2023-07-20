@@ -1,0 +1,118 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    padding: 25px;
+    font-family: Arial, sans-serif;
+}
+
+table{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.logo img{
+    width: 50%;
+}
+
+.info-company{
+    width: 45%;
+    text-align: center;
+}
+
+.info-purchase{
+    width: 30%;
+    margin: 10px;
+}
+
+.invoice{
+    font-size: 12px;
+    display: block;
+    background-color: #0353A4;
+    color: white;
+    text-align: center;
+    padding: 3px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+}
+
+.cointainer-invoice{
+    background-color: #caf0f8;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.cointainer-invoice{
+    padding: 0px 4px 5px;
+}
+
+.title{
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#container-info{
+    background: #caf0f8;
+    font-size: 14px;
+    padding: 15px;
+    border-radius: 10px;
+    /* border: 1px solid black; */
+    
+}
+
+#container-info strong{
+    width: 75px;
+    display: inline-block;
+}
+
+#container-info p{
+    display: inline-block;
+}
+
+#container-product, tr, th{
+
+    margin: 0 auto;
+    border-top: 1px solid black;
+    border-collapse: collapse;
+
+}
+
+table, th, td{
+    font-size: 14px;
+}
+
+#container-product thead th{
+    background: #0353A4;
+    color: white;
+    padding: 5px;
+    /* border-radius: 5px; */
+}
+
+#container-product tbody td{
+    padding: 5px;
+
+}
+
+#container-product tr:nth-child(even){
+    background: #ededed;
+}
+
+.total{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.message{
+    margin-top: 10px;
+    font-size: 13px;
+    text-align: center;
+}
+
+

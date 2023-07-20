@@ -73,21 +73,41 @@ class Purchases extends Controller
         die();
     }
 
-    //Using Dompdf
-    public function report()
+    //Using Dompdf for invoices and tickets
+    public function report($dataSet)
     {
+        $array = explode(',', $dataSet);
+        $type = $array[0];
+        $idPurchase = $array[1];
+
+        $data['title'] = 'Reporte';
+        $data['company'] = $this->model->getCompany();
+        $data['purchase'] = $this->model->getPurchase($idPurchase);
+        $this->views->getView('purchases', $type, $data);
+        $html = ob_get_clean();
+
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
-        $dompdf->loadHtml('hello world');
+        $options = $dompdf->getOptions();
+        $options->set('isJavascriptEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->loadHtml($html);
 
         // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper(array(0,0, 222, 841), 'portrait');
+        // $dompdf->setPaper(array(0, 0, 222, 841), 'portrait');
+        // $dompdf->setPaper('letter', 'portrait');
+        if ($type == 'receipt') {
+            $dompdf->setPaper(array(0, 0, 500, 700), 'portrait');
+        }else{
+            $dompdf->setPaper('A4', 'vertical');
+        }
 
         // Render the HTML as PDF
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        $dompdf->stream('ticket.pdf', array('Attachment' => false));
+        $dompdf->stream('receipt.pdf', array('Attachment' => false));
     }
 
     function generate_numbers($start, $count, $digits)
