@@ -130,6 +130,12 @@
 <script>
     const base_url = '<?php echo BASE_URL; ?>';
 </script>
+<?php if (!empty($data['search'])) { ?>
+    <script>
+        const nameKey = '<?php echo $data['cart']; ?>';
+    </script>
+    <script src="<?php echo BASE_URL.'assets/js/'.$data['search']; ?>"></script>
+<?php } ?>
 <?php if (!empty($data['script'])) { ?>
     <script src="<?php echo BASE_URL.'assets/js/modules/'.$data['script']; ?>"></script>
 <?php } ?>

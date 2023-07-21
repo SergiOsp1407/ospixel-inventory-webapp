@@ -170,4 +170,22 @@ class Clients extends Controller
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         die();
     }
+
+    //Search client using the name for purchases
+    public function search()
+    {
+
+        $array = array();
+        $value = $_GET['term'];
+        $data = $this->model->searchByName($value);
+        foreach ($data as $row) {
+            $result['id'] = $row['id'];
+            $result['label'] = $row['name'];
+            $result['phone'] = $row['phone'];
+            $result['address'] = $row['address'];
+            array_push($array, $result);
+        }
+        echo json_encode($array, JSON_UNESCAPED_UNICODE);
+        die();
+    }
 }

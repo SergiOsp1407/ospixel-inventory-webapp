@@ -111,7 +111,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="widgets.html">
+                    <a href="<?php echo BASE_URL . 'sales'; ?>">
                         <div class="parent-icon"><i class="fa-solid fa-cash-register"></i>
                         </div>
                         <div class="menu-title">Ventas</div>

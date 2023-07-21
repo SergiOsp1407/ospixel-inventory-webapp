@@ -22,6 +22,8 @@ class Purchases extends Controller
     {
         $data['title'] = 'Purchases';
         $data['script'] = 'purchases.js';
+        $data['search'] = 'search.js';
+        $data['cart'] = 'posPurchase';
         $this->views->getView('purchases', 'index', $data);
     }
 

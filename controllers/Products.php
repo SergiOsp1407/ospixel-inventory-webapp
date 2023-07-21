@@ -206,21 +206,27 @@ class Products extends Controller
         $json = file_get_contents('php://input');
         $dataSet = json_decode($json, true);
         $array['products'] = array();
-        $total = 0;
+        $totalPurchase = 0;
+        $totalSale = 0;
         if (!empty($dataSet)) {
             foreach ($dataSet as $product) {
                 $result = $this->model->edit($product['id']);
                 $data['id'] = $result['id'];
                 $data['description'] = $result['description'];
                 $data['purchase_price'] = $result['purchase_price'];
+                $data['sale_price'] = $result['sale_price'];
                 $data['quantity'] = $product['quantity'];
-                $subTotal = $result['purchase_price'] * $product['quantity'];
-                $data['subTotal'] = number_format($subTotal, 2);
+                $subTotalPurchase = $result['purchase_price'] * $product['quantity'];
+                $subTotalSale = $result['sale_price'] * $product['quantity'];
+                $data['subTotalPurchase'] = number_format($subTotalPurchase, 2);
+                $data['subTotalSale'] = number_format($subTotalSale, 2);
                 array_push($array['products'], $data);
-                $total += $subTotal;
+                $totalPurchase += $subTotalPurchase;
+                $totalSale += $subTotalSale;
             }
         }
-        $array['total'] = number_format($total, 2);
+        $array['totalPurchase'] = number_format($totalPurchase, 2);
+        $array['totalSale'] = number_format($totalSale, 2);
         echo json_encode($array, JSON_UNESCAPED_UNICODE);
         die();
     }
