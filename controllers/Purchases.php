@@ -119,7 +119,11 @@ class Purchases extends Controller
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        $dompdf->stream('receipt.pdf', array('Attachment' => false));
+        if ($type == 'receipt') {
+            $dompdf->stream('Tirilla.pdf', array('Attachment' => false));            
+        } else {            
+            $dompdf->stream('Factura.pdf', array('Attachment' => false));
+        }
     }
 
     //Historic purchases
@@ -169,6 +173,7 @@ class Purchases extends Controller
         die();
     }
 
+    //Function to create the serialization of receipts and invoices
     function generate_numbers($start, $count, $digits)
     {
 

@@ -4,6 +4,7 @@ const idClient = document.querySelector("#idClient");
 const clientPhone = document.querySelector("#phone");
 const clientAddress = document.querySelector("#address");
 
+const discount = document.querySelector("#discount");
 const paymentMethod = document.querySelector("#paymentMethod");
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
           products: listShoppingCart,
           idClient: idClient.value,
           paymentMethod: paymentMethod.value,
+          discount: discount.value,
         })
       );
       //Check status
@@ -64,34 +66,34 @@ document.addEventListener("DOMContentLoaded", function () {
           const response = JSON.parse(this.responseText);
           console.log(this.responseText);
           customAlert(response.type, response.msg);
-        //   if (response.type == "success") {
-        //     localStorage.removeItem(nameKey);
-        //     setTimeout(() => {
-        //       Swal.fire({
-        //         title: "¿Desea generar el reporte?",
-        //         showDenyButton: true,
-        //         showCancelButton: true,
-        //         confirmButtonText: "Recibo",
-        //         denyButtonText: `Factura`,
-        //       }).then((result) => {
-        //         /* Read more about isConfirmed, isDenied below */
-        //         if (result.isConfirmed) {
-        //           const route =
-        //             base_url +
-        //             "purchases/report/receipt/" +
-        //             response.idPurchase;
-        //           window.open(route, "_blank");
-        //         } else if (result.isDenied) {
-        //           const route =
-        //             base_url +
-        //             "purchases/report/invoice/" +
-        //             response.idPurchase;
-        //           window.open(route, "_blank");
-        //         }
-        //         window.location.reload();
-        //       });
-        //     }, 2000);
-        //   }
+          if (response.type == "success") {
+            localStorage.removeItem(nameKey);
+            setTimeout(() => {
+              Swal.fire({
+                title: "¿Desea generar el reporte?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Recibo",
+                denyButtonText: `Factura`,
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  const route =
+                    base_url +
+                    "sales/report/receipt/" +
+                    response.idSale;
+                  window.open(route, "_blank");
+                } else if (result.isDenied) {
+                  const route =
+                    base_url +
+                    "sales/report/invoice/" +
+                    response.idSale;
+                  window.open(route, "_blank");
+                }
+                window.location.reload();
+              });
+            }, 2000);
+          }
         }
       };
     }

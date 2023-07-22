@@ -12,14 +12,29 @@
             <div class="tab-pane fade show active p-3" id="nav-sales" role="tabpanel" aria-labelledby="nav-sales-tab" tabindex="0">
                 <h5 class="card-title text-center"><i class="fa-solid fa-cash-register"></i> Nueva Venta</h5>
                 <hr>
-                <div class="btn-group btn-group-toggle mb-2" data-toggle="buttons">
-                    <label class="btn btn-dark">
-                        <input type="radio" id="barCode" hidden name="searchProduct" checked><i class="fas fa-barcode"></i> Código de barras
-                    </label>
-                    <label class="btn btn-info">
-                        <input type="radio" id="description" hidden name="searchProduct"><i class="fas fa-list"></i> Nombre
-                    </label>
+                <div class="d-flex justify-content-between">
+                    <div class="col-md-6">
+                        <div class="btn-group btn-group-toggle mb-2" data-toggle="buttons">
+                            <label class="btn btn-dark">
+                                <input type="radio" id="barCode" hidden name="searchProduct" checked><i class="fas fa-barcode"></i> Código de barras
+                            </label>
+                            <label class="btn btn-info">
+                                <input type="radio" id="description" hidden name="searchProduct"><i class="fas fa-list"></i> Nombre
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text">Factura N°</span>
+                            <input class="form-control" type="text" value="<?php echo $data['serie'][0]; ?>" disabled>
+                        </div>
+                    </div>
+
+
                 </div>
+
+
                 <!-- Input to search by code -->
                 <div class="input-group d-none mb-2" id="containerCode">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
@@ -80,6 +95,12 @@
                             <input class="form-control" type="text" value="<?php echo $_SESSION['name_user']; ?>" placeholder="Vendedor" disabled>
                         </div>
 
+                        <label>Descuento</label>
+                        <div class="input-group mb-2">
+                            <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
+                            <input class="form-control" type="text" id="discount" placeholder="Descuento">
+                        </div>
+
                         <label>Total a pagar</label>
                         <div class="input-group mb-2">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
@@ -96,7 +117,7 @@
                             </select>
                         </div>
 
-                        
+
                         <div class="d-grid">
                             <button class="btn btn-success" type="button" id="btnAction">Generar venta</button>
                         </div>

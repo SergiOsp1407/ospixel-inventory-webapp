@@ -106,12 +106,24 @@ table td {
     font-weight: bold;
 }
 
+.paymentMethod{
+    font-size: 13px;
+    text-align: center;
+}
+
 .message{
     font-size: 13px;
     text-align: center;
 }
 
 .cancelPurchase{
+    margin-top: 10px;
+    font-size: 20px;
+    text-align: center;
+    color: #C1121F;
+}
+
+.cancelSale{
     margin-top: 10px;
     font-size: 20px;
     text-align: center;
