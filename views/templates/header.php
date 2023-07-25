@@ -47,7 +47,7 @@
             <!--navigation-->
             <ul class="metismenu" id="menu">
                 <li>
-                    <a href="javascript:;">
+                    <a href="<?php echo BASE_URL . 'admin'; ?>">
                         <div class="parent-icon"><i class="fas fa-tachometer-alt"></i>
                         </div>
                         <div class="menu-title">Dashboard</div>

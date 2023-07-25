@@ -4,8 +4,10 @@ const idClient = document.querySelector("#idClient");
 const clientPhone = document.querySelector("#phone");
 const clientAddress = document.querySelector("#address");
 
+
 const discount = document.querySelector("#discount");
 const paymentMethod = document.querySelector("#paymentMethod");
+const direct_printing = document.querySelector("#direct_printing");
 
 document.addEventListener("DOMContentLoaded", function () {
   //Load data from localStorage
@@ -58,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
           idClient: idClient.value,
           paymentMethod: paymentMethod.value,
           discount: discount.value,
+          // print: direct_printing.checked,
         })
       );
       //Check status
@@ -98,6 +101,23 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     }
   });
+
+  //Load data with datatables plugin
+  tblHistory = $("#tblHistory").DataTable({
+    ajax: {
+      url: base_url + "sales/list",
+      dataSrc: "",
+    },
+    columns: [{ data: "date" }, { data: "time" }, { data: "total" }, { data: "name" }, { data: "serie" }, { data: "payment_method" }, { data: "actions" }],
+    language: {
+      url: base_url + "assets/js/spanish.json",
+    },
+    dom,
+    buttons,
+    responsive: true,
+    order: [[0, "desc"]],
+  });
+
 });
 
 //Load products
@@ -142,3 +162,60 @@ function showProducts() {
           </tr>`;
   }
 }
+
+function viewReport(idSale) {
+  Swal.fire({
+    title: "¿Desea generar el reporte?",
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: "Recibo",
+    denyButtonText: `Factura`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      const route = base_url + "sales/report/receipt/" + idSale;
+      window.open(route, "_blank");
+    } else if (result.isDenied) {
+      const route = base_url + "sales/report/invoice/" + idSale;
+      window.open(route, "_blank");
+    }
+  });
+}
+
+function cancelSale(idSale) {
+  Swal.fire({
+    title: "¿Deseas eliminar el registro?",
+    text: "El stock de los productos se reintegrará",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, eliminalo!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "sales/cancel/" + idSale;
+      //Create an instance of XMLHttpRequest
+      const http = new XMLHttpRequest();
+      //Open connection - POST - GET
+      http.open("GET", url, true);
+      //Sen data
+      http.send();
+      //Check status
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const response = JSON.parse(this.responseText);
+          customAlert(response.type, response.msg);
+          if (response.type == "success") {
+            tblHistory.ajax.reload();
+          }
+        }
+      };
+      // Swal.fire(
+      //   'Deleted!',
+      //   'Your file has been deleted.',
+      //   'success'
+      // )
+    }
+  });
+}
+

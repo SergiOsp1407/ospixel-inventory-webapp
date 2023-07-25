@@ -30,8 +30,13 @@
                             <input class="form-control" type="text" value="<?php echo $data['serie'][0]; ?>" disabled>
                         </div>
                     </div>
-
-
+                    <div class="col-md-3">
+                        <!-- <div class="btn-group-toggle float-end" data-toggle="buttons">
+                            <label class="btn btn-primary">
+                                <input type="checkbox" id="direct_printing"> Impresión directa
+                            </label>
+                        </div> -->
+                    </div>
                 </div>
 
 
@@ -111,9 +116,9 @@
                         <div class="form-group mb-2">
                             <label for="paymentMethod">Método</label>
                             <select id="paymentMethod" class="form-control">
-                                <option value="cash">Efectivo</option>
-                                <option value="credit">Crédito</option>
-                                <option value="transfer">Transferencia</option>
+                                <option value="efectivo">Efectivo</option>
+                                <option value="credito">Crédito</option>
+                                <option value="transferencia">Transferencia</option>
                             </select>
                         </div>
 
@@ -144,7 +149,8 @@
                                 <th>Hora</th> <!-- time -->
                                 <th>Total</th> <!-- total -->
                                 <th>Cliente</th> <!-- id_client -->
-                                <th>Método</th> <!-- serie -->
+                                <th>Serie</th> <!-- serie -->
+                                <th>Método</th> <!-- payment_method -->
                                 <th></th>
                             </tr>
                         </thead>

@@ -7,6 +7,7 @@ define('PASS', '');
 define('DBNAME', 'ospixel_db');
 define('CHARSET', '');
 define('TITLE', 'Ospixel');
+define('CURRENCY', 'S/ ');
 
 
 ?>

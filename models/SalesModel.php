@@ -48,27 +48,32 @@ class SalesModel extends Query{
         
     }
 
+    //Get historic of sales
+    public function getSales() {
+
+        $sql = "SELECT v.*, c.name FROM sales v INNER JOIN clients c ON v.id_client = c.id";
+        return $this->selectAll($sql);
+        
+    }
+    
+    public function cancel($idSale) {
+        $sql = "UPDATE sales SET status = ? WHERE id = ?";
+        $array = array(0, $idSale);
+        return $this->save($sql, $array);
+    }
+    
+    public function cancelCredit($idSale) {
+        $sql = "UPDATE credits SET status = ? WHERE id_sale = ?";
+        $array = array(2, $idSale);
+        return $this->save($sql, $array);
+    }
+
     public function getSerie() {
 
         $sql = "SELECT MAX(id) AS total FROM sales";
         return $this->select($sql);
         
-    }
+    }    
 
-    
-
-//     //Get historic of purchases
-//     public function getPurchases() {
-
-//         $sql = "SELECT c.*, p.name FROM purchases c INNER JOIN suppliers p ON c.id_supplier = p.id";
-//         return $this->selectAll($sql);
-        
-//     }
-
-//     public function cancel($idPurchase) {
-//         $sql = "UPDATE purchases SET status = ? WHERE id = ?";
-//         $array = array(0, $idPurchase);
-//         return $this->save($sql, $array);
-//     }
 }
 ?>
