@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     minLength: 2,
     select: function (event, ui) {
       console.log(ui.item);
-      addProduct(ui.item.id, 1);
+      addProduct(ui.item.id, 1, ui.item.stock);
       inputSearchByName.value = "";
       inputSearchByName.focus();
       return false;
@@ -102,7 +102,7 @@ function searchProduct(value) {
     if (this.readyState == 4 && this.status == 200) {
       const response = JSON.parse(this.responseText);
       console.log(this.responseText);
-      addProduct(response.id, 1);
+      addProduct(response.id, 1, response.quantity);
       inputSearchByCode.value = "";
       inputSearchByCode.focus();
     }
@@ -110,10 +110,27 @@ function searchProduct(value) {
 }
 
 //Add products to localStorage
-function addProduct(idProduct, quantity) {
+function addProduct(idProduct, quantity, actualStock) {
+  
+
   if (localStorage.getItem(nameKey) == null) {
     listShoppingCart = [];
   } else {
+    if (nameKey === "posSale") {
+      let quantityAdded = 0;
+      for (let i = 0; i < listShoppingCart.length; i++) {
+        if (listShoppingCart[i]["id"] == idProduct) {
+          quantityAdded =
+            parseInt(listShoppingCart[i]["quantity"]) + parseInt(quantity);
+        }
+      }
+      console.log(quantityAdded);
+      if (quantityAdded > actualStock) {
+        customAlert("warning", "Unidades insuficientes");
+        return;
+      }
+    }
+    
     for (let i = 0; i < listShoppingCart.length; i++) {
       if (listShoppingCart[i]["id"] == idProduct) {
         listShoppingCart[i]["quantity"] = parseInt(
@@ -173,11 +190,40 @@ function addQuantity() {
 }
 
 function changeQuantity(idProduct, quantity) {
-  for (let i = 0; i < listShoppingCart.length; i++) {
-    if (listShoppingCart[i]["id"] == idProduct) {
-      listShoppingCart[i]["quantity"] = quantity;
+  if (nameKey === "posSale") {
+    const url = base_url + "sales/checkStock/" + idProduct;
+    //Create an instance of XMLHttpRequest
+    const http = new XMLHttpRequest();
+    //Open connection - POST - GET
+    http.open("GET", url, true);
+    //Sen data
+    http.send();
+    //Check status
+    http.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        if (response.quantity >= quantity) {
+          for (let i = 0; i < listShoppingCart.length; i++) {
+            if (listShoppingCart[i]["id"] == idProduct) {
+              listShoppingCart[i]["quantity"] = quantity;
+            }
+          }
+          localStorage.setItem(nameKey, JSON.stringify(listShoppingCart));
+          
+        } else {
+          customAlert("warning", "Unidades insuficientes");
+        }
+        showProducts();
+        return;
+      }
+    };
+  } else {
+    for (let i = 0; i < listShoppingCart.length; i++) {
+      if (listShoppingCart[i]["id"] == idProduct) {
+        listShoppingCart[i]["quantity"] = quantity;
+      }
     }
+    localStorage.setItem(nameKey, JSON.stringify(listShoppingCart));
+    showProducts();
   }
-  localStorage.setItem(nameKey, JSON.stringify(listShoppingCart));
-  showProducts();
 }

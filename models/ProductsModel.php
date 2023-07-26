@@ -60,14 +60,14 @@ class ProductsModel extends Query{
 
     public function searchByCode($value) {
 
-        $sql = "SELECT id FROM products WHERE code = '$value'";
+        $sql = "SELECT id, quantity FROM products WHERE code = '$value'";
         return $this->select($sql);
         
     }
     
     public function searchByName($value) {
 
-        $sql = "SELECT id, description FROM products WHERE description LIKE '%".$value."%' AND status = 1 LIMIT 10";
+        $sql = "SELECT id, description, quantity FROM products WHERE description LIKE '%".$value."%' AND status = 1 LIMIT 10";
         return $this->selectAll($sql);
         
     }

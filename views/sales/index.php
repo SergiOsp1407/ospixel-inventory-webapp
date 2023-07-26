@@ -12,7 +12,7 @@
             <div class="tab-pane fade show active p-3" id="nav-sales" role="tabpanel" aria-labelledby="nav-sales-tab" tabindex="0">
                 <h5 class="card-title text-center"><i class="fa-solid fa-cash-register"></i> Nueva Venta</h5>
                 <hr>
-                <div class="d-flex justify-content-between">
+                <div class="row mb-2">
                     <div class="col-md-6">
                         <div class="btn-group btn-group-toggle mb-2" data-toggle="buttons">
                             <label class="btn btn-dark">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-3 mb-2">
                         <div class="input-group">
                             <span class="input-group-text">Factura N°</span>
                             <input class="form-control" type="text" value="<?php echo $data['serie'][0]; ?>" disabled>
@@ -72,7 +72,7 @@
 
                 <hr>
 
-                <div class="d-flex justify-content-between">
+                <div class="row justify-content-between">
                     <div class="col-md-4">
                         <label>Buscar Cliente</label>
                         <div class="input-group mb-2">

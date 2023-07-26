@@ -269,6 +269,12 @@ class Sales extends Controller
     //     $printer->close();
     // }
 
+    function checkStock($idProduct) {
+        $data = $this->model->getProduct($idProduct);
+        echo json_encode($data);
+        die();
+    }
+
 
     //Function to create the serialization of receipts and invoices
     function generate_numbers($start, $count, $digits)

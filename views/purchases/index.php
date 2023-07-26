@@ -52,7 +52,7 @@
 
                 <hr>
 
-                <div class="d-flex justify-content-between">
+                <div class="row justify-content-between">
                     <div class="col-md-4">
                         <label>Buscar proveedor</label>
                         <div class="input-group mb-2">

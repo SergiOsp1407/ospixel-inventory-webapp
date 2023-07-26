@@ -194,6 +194,7 @@ class Products extends Controller
         foreach ($data as $row) {
             $result['id'] = $row['id'];
             $result['label'] = $row['description'];
+            $result['stock'] = $row['quantity'];
             array_push($array, $result);
         }
         echo json_encode($array, JSON_UNESCAPED_UNICODE);
