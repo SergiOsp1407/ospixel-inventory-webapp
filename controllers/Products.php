@@ -9,7 +9,6 @@ class Products extends Controller
 
     public function index()
     {
-
         $data['title'] = 'Productos';
         $data['script'] = 'products.js';
         $data['measures'] = $this->model->getData('measures');
@@ -19,7 +18,6 @@ class Products extends Controller
 
     public function list()
     {
-
         $data = $this->model->getProducts(1);
         for ($i = 0; $i < count($data); $i++) {
             $data[$i]['image'] = '<img class="img-thumbnail" src="' . $data[$i]['photo'] . '" width="100">';
@@ -129,7 +127,6 @@ class Products extends Controller
 
     public function edit($idProduct)
     {
-
         $data = $this->model->edit($idProduct);
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
@@ -145,7 +142,6 @@ class Products extends Controller
 
     public function listInactives()
     {
-
         $data = $this->model->getProducts(0);
         for ($i = 0; $i < count($data); $i++) {
             $data[$i]['image'] = '<img class="img-thumbnail" src="' . $data[$i]['photo'] . '" width="100">';
@@ -160,7 +156,6 @@ class Products extends Controller
 
     public function reactivate($idProduct)
     {
-
         if (isset($_GET) && is_numeric($idProduct)) {
             $data = $this->model->delete(1, $idProduct);
             if ($data == 1) {
@@ -178,16 +173,19 @@ class Products extends Controller
     // Search Products using the code
     public function searchByCode($value)
     {
-
+        $array = array('status' => false, 'dataSet' => '');
         $data = $this->model->searchByCode($value);
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        if (!empty($data)) {
+            $array['status'] = true;
+            $array['dataSet'] = $data;
+        }        
+        echo json_encode($array, JSON_UNESCAPED_UNICODE);
         die();
     }
 
     //Search products using the product name
     public function searchByName()
     {
-
         $array = array();
         $value = $_GET['term'];
         $data = $this->model->searchByName($value);
@@ -204,7 +202,6 @@ class Products extends Controller
     //Show products from localStorage
     public function showData()
     {
-
         $json = file_get_contents('php://input');
         $dataSet = json_decode($json, true);
         $array['products'] = array();

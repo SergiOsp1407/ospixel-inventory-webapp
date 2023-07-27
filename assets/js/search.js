@@ -101,10 +101,13 @@ function searchProduct(value) {
   http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const response = JSON.parse(this.responseText);
-      console.log(this.responseText);
-      addProduct(response.id, 1, response.quantity);
+      if (response.status) {
+        addProduct(response.dataSet.id, 1, response.dataSet.quantity);        
+      }else{
+        customAlert('warning', 'Código no encontrado');
+      }
       inputSearchByCode.value = "";
-      inputSearchByCode.focus();
+      inputSearchByCode.focus();        
     }
   };
 }

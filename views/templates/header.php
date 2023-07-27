@@ -13,6 +13,7 @@
     <!-- loader-->
     <link href="<?php echo BASE_URL; ?>assets/css/pace.min.css" rel="stylesheet" />
     <script src="<?php echo BASE_URL; ?>assets/js/pace.min.js"></script>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/jquery-ui.min.css">
     <!-- Bootstrap CSS -->
     <link href="<?php echo BASE_URL; ?>assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo BASE_URL; ?>assets/css/bootstrap-extended.css" rel="stylesheet">
@@ -25,7 +26,7 @@
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/semi-dark.css" />
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/header-colors.css" />
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/DataTables/datatables.min.css" />
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/jquery-ui.min.css">
+    
     <title><?php echo TITLE . ' | ' . $data['title']; ?></title>
 </head>
 
@@ -118,7 +119,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="widgets.html">
+                    <a href="<?php echo BASE_URL . 'credits'; ?>">
                         <div class="parent-icon"><i class="bi bi-credit-card"></i>
                         </div>
                         <div class="menu-title">Administrar creditos</div>

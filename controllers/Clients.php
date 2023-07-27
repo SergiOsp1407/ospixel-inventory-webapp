@@ -177,7 +177,7 @@ class Clients extends Controller
     {
 
         $array = array();
-        $value = $_GET['term'];
+        $value = strClean($_GET['term']);
         $data = $this->model->searchByName($value);
         foreach ($data as $row) {
             $result['id'] = $row['id'];
