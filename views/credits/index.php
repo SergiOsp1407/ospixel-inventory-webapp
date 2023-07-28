@@ -9,7 +9,7 @@
                 <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                 </a>
                 <ul class="dropdown-menu">
-                    
+
                     <li><a class="dropdown-item" href="#" id="newPartialPayment"><i class="fas fa-dollar-sign"></i> Abonos</a>
                     </li>
                 </ul>
@@ -25,12 +25,22 @@
             <div class="tab-pane fade show active mt-2" id="nav-credits" role="tabpanel" aria-labelledby="nav-credits-tab" tabindex="0">
                 <h5 class="card-title  text-center"><i class="fa-solid fa-credit-card"></i> Listado de Créditos</h5>
                 <hr>
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="form-group">
+                        <label for="from">Desde</label>
+                        <input id="from" class="form-control" type="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="until">Hasta</label>
+                        <input id="until" class="form-control" type="date">
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover align-middle nowrap" id="tblCredits" style="width: 100%;">
                         <thead>
                             <tr>
-                                <th>Monto</th> <!-- value_credit -->
                                 <th>Fecha</th> <!-- date -->
+                                <th>Monto</th> <!-- value_credit -->
                                 <th>Cliente</th> <!-- client_name -->
                                 <th>Saldo restante</th> <!--  -->
                                 <th>Abonado</th> <!--  -->
@@ -46,7 +56,21 @@
                 </div>
             </div>
             <div class="tab-pane fade p-3" id="nav-partialpayment" role="tabpanel" aria-labelledby="nav-partialpayment-tab" tabindex="0">
+                
 
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle nowrap" id="tblPartialPayments" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th> <!-- date -->
+                                <th>Abono</th> <!-- partial_payment -->
+                                <th>N° Crédito</th> <!-- credit -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -86,14 +110,14 @@
                         </ul>
                     </div>
                     <div class="col-md-6 mb-2">
-                    <label>Abonado</label>
+                        <label>Abonado</label>
                         <div class="input-group">
                             <span class="input-group-text"> <i class="fas fa-dollar-sign"></i></span>
                             <input class="form-control" type="text" id="partialpayment" readonly>
                         </div>
                     </div>
                     <div class="col-md-6 mb-2">
-                    <label>Restante</label>
+                        <label>Restante</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                             <input class="form-control" type="text" id="remainingbalance" readonly>

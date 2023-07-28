@@ -81,7 +81,7 @@ class Sales extends Controller
                 if ($sale > 0) {
                     if ($paymentMethod == 'credito') {
                         $valueCredit = $total - $discount;
-                        $this->model->registerCredits($valueCredit, $sale);
+                        $this->model->registerCredits($valueCredit, $date, $time, $sale);
                     }
                     // if ($dataSet['print']) {
                     //     $this->directPrinting($sale);
@@ -102,6 +102,7 @@ class Sales extends Controller
     //Using Dompdf for invoices and tickets
     public function report($dataSet)
     {
+        ob_start();
         $array = explode(',', $dataSet);
         $type = $array[0];
         $idSale = $array[1];

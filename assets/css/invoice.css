@@ -141,6 +141,11 @@ table, th, td{
     font-weight: bold;
 }
 
+.text-center{
+    text-align: center;
+    font-size: 14px;
+}
+
 .message{
     margin-top: 10px;
     font-size: 13px;
@@ -160,5 +165,9 @@ table, th, td{
     font-size: 20px;
     text-align: center;
     color: #C1121F;
+}
+
+.partialpayments-tr{
+    text-align: center;
 }
 

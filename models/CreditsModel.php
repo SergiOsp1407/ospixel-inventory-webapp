@@ -24,9 +24,44 @@ class CreditsModel extends Query{
     }
 
     public function registerPartialPayment($paid_value, $idCredit) {
+
         $sql = "INSERT INTO payments (partial_payment, id_credit) VALUES (?,?)";
         $array = array($paid_value, $idCredit);
         return $this->insert($sql, $array);
     }
+
+    public function getCredit($idCredit) {
+
+        $sql = "SELECT cr.*, v.products, cl.identity_type, cl.client_identity, cl.name, cl.phone, cl.address FROM credits cr INNER JOIN sales v ON cr.id_sale = v.id INNER JOIN clients cl ON v.id_client = cl.id WHERE cr.id = $idCredit";
+        return $this->select($sql);
+    }
+
+    public function updateCredit($status, $idCredit) {
+
+        $sql = "UPDATE credits SET status = ? WHERE id = ?";        
+        $array = array($status, $idCredit);
+        return $this->save($sql, $array);
+    }
+
+    public function getPartialPayments($idCredit) {
+
+        $sql = "SELECT * FROM payments WHERE id_credit = $idCredit";
+        return $this->selectAll($sql);
+    
+    }
+    
+    public function getHistorialPartialPayments() {
+    
+        $sql = "SELECT * FROM payments";
+        return $this->selectAll($sql);
+    
+    }
+
+    public function getCompany() {
+        
+        $sql = "SELECT * FROM configuration";
+        return $this->select($sql);
+    }
+
 }
 ?>

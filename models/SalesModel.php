@@ -26,10 +26,10 @@ class SalesModel extends Query{
         return $this->save($sql, $array);
     }
 
-    public function registerCredits($value_credit, $idSale) {
+    public function registerCredits($value_credit, $date, $time, $idSale) {
 
-        $sql = "INSERT INTO credits (value_credit, id_sale) VALUES (?,?)";
-        $array = array($value_credit, $idSale);
+        $sql = "INSERT INTO credits (value_credit, date, time, id_sale) VALUES (?,?,?,?)";
+        $array = array($value_credit, $date, $time, $idSale);
         return $this->insert($sql, $array);
         
     }

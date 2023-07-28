@@ -82,6 +82,7 @@ class Purchases extends Controller
     //Using Dompdf for invoices and tickets
     public function report($dataSet)
     {
+        ob_start();
         $array = explode(',', $dataSet);
         $type = $array[0];
         $idPurchase = $array[1];

@@ -1,4 +1,11 @@
 <?php
+// somewhere early in your project's loading, require the Composer autoloader
+// see: http://getcomposer.org/doc/00-intro.md
+require 'vendor/autoload.php';
+
+// reference the Dompdf namespace
+use Dompdf\Dompdf;
+
 class Credits extends Controller{
 
     public function __construct() {
@@ -18,15 +25,19 @@ class Credits extends Controller{
 
         $data = $this->model->getCredits();
         for ($i=0; $i < count($data); $i++) { 
+            $credit = $this->model->getCredit($data[$i]['id']);
             $result = $this->model->getPartialpayment($data[$i]['id']);
             $partialpayment = ($result['total'] == null ) ? 0 : $result['total'];
             $remainingbalance = $data[$i]['value_credit'] - $partialpayment;
+            if ($remainingbalance < 1 && $credit['status'] = 1) {
+                $this->model->updateCredit(0, $data[$i]['id']);
+            }
 
             $data[$i]['value_credit'] = number_format($data[$i]['value_credit'], 2);
             $data[$i]['partialpayment'] = number_format($partialpayment, 2);
             $data[$i]['remainingbalance'] = number_format($remainingbalance, 2);
             $data[$i]['sale'] = 'N°: ' . $data[$i]['id_sale'];
-            $data[$i]['actions'] = '<a class="btn btn-danger" href="#" target="_blank"><i class="fas fa-file-pdf"></i></a>';
+            $data[$i]['actions'] = '<a class="btn btn-danger" href="'.BASE_URL.'credits/report/'.$data[$i]['id'].'" target="_blank"><i class="fas fa-file-pdf"></i></a>';
         }
 
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -77,6 +88,53 @@ class Credits extends Controller{
             $response = array('msg' => 'Todos los campos son requeridos', 'type' => 'warning');
         }
         echo json_encode($response);
+        die();
+    }
+
+    
+    //Using Dompdf for invoices and tickets
+    public function report($idCredit)
+    {    
+        ob_start();
+        $data['title'] = 'Reporte';
+        $data['company'] = $this->model->getCompany();
+        $data['credit'] = $this->model->getCredit($idCredit);
+        $data['partialpayments'] = $this->model->getPartialPayments($idCredit);
+    
+        //Condition for 'Page not found' error
+        if (empty($data['credit'])) {
+            echo 'Pagina no encontrada';
+            exit;
+        }
+        $this->views->getView('credits', 'report', $data);
+        $html = ob_get_clean();
+    
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        $options = $dompdf->getOptions();
+        $options->set('isJavascriptEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->loadHtml($html);
+    
+        // (Optional) Setup the paper size and orientation
+        // $dompdf->setPaper(array(0, 0, 222, 841), 'portrait');
+        // $dompdf->setPaper('letter', 'portrait');
+        $dompdf->setPaper('A4', 'vertical');
+    
+        // Render the HTML as PDF
+        $dompdf->render();
+    
+        // Output the generated PDF to Browser
+        $dompdf->stream('Report.pdf', array('Attachment' => false));
+    }
+
+    public function listPartialPayments() {
+        $data = $this->model->getHistorialPartialPayments();
+        for ($i=0; $i < count($data); $i++) { 
+            $data[$i]['credit'] = 'N°: ' . $data[$i]['id_credit'];
+        }
+        echo json_encode($data);
         die();
     }
 

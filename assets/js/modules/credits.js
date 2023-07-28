@@ -1,4 +1,4 @@
-let tblCredits;
+let tblCredits, tblPartialPayments;
 const idCredit = document.querySelector("#idCredit");
 const searchClient = document.querySelector("#searchClient");
 const phone = document.querySelector("#phone");
@@ -13,6 +13,10 @@ const btnAction = document.querySelector("#btnAction");
 const newPartialPayment = document.querySelector("#newPartialPayment");
 const modalPartialpayment = new bootstrap.Modal("#modalPartialpayment");
 
+//Variables used in date filter
+const from = document.querySelector("#from");
+const until = document.querySelector("#until");
+
 document.addEventListener("DOMContentLoaded", function () {
   //Load data with datatables plugin
   tblCredits = $("#tblCredits").DataTable({
@@ -21,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
       dataSrc: "",
     },
     columns: [
-      { data: "value_credit" },
       { data: "date" },
+      { data: "value_credit" },
       { data: "name" },
       { data: "remainingbalance" },
       { data: "partialpayment" },
@@ -90,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
       phone.value == ""
     ) {
       customAlert("warning", "Busca y selecciona el cliente");
-    } else if (remainingbalance.value < paid_value.value) {
+    } else if (parseFloat(remainingbalance.value) < parseFloat(paid_value.value)) {
       customAlert("warning", "El abono es mayor al saldo restante del crédito");
     } else {
       const url = base_url + "credits/registerPartialPayment";
@@ -113,9 +117,55 @@ document.addEventListener("DOMContentLoaded", function () {
           if (response.type == "success") {
             modalPartialpayment.hide();
             tblCredits.ajax.reload();
+            setTimeout(() => {
+              const route = base_url + 'credits/report/' + idCredit.value;
+              window.open(route, '_blank');
+            }, 2000);
           }
         }
       };
+    }
+  });
+
+  //Load data with datatables plugin
+  tblPartialPayments = $("#tblPartialPayments").DataTable({
+    ajax: {
+      url: base_url + "credits/listPartialPayments",
+      dataSrc: "",
+    },
+    columns: [
+      { data: "date" },
+      { data: "partial_payment" },
+      { data: "credit" }
+    ],
+    language: {
+      url: base_url + "assets/js/spanish.json",
+    },
+    dom,
+    buttons,
+    responsive: true,
+    order: [[0, "asc"]],
+  });
+
+  //Filter by date ranges
+  from.addEventListener("change", function () {
+    tblCredits.draw();
+  });
+  until.addEventListener("change", function () {
+    tblCredits.draw();
+  });
+
+  //Function to create filters in date , in order to show purchases history
+  $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+    var FilterStart = from.value;
+    var FilterEnd = until.value;
+    var DataTableStart = data[0].trim();
+    var DataTableEnd = data[0].trim();
+    if (FilterStart == "" || FilterEnd == "") {
+      return true;
+    }
+    if (DataTableStart >= FilterStart && DataTableEnd <= FilterEnd) {
+      return true;
     }
   });
 });
