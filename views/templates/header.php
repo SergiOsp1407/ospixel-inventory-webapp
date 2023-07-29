@@ -126,7 +126,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="widgets.html">
+                    <a href="<?php echo BASE_URL . 'quotes'; ?>">
                         <div class="parent-icon"><i class="bi bi-list-columns"></i>
                         </div>
                         <div class="menu-title">Cotizaciones</div>
