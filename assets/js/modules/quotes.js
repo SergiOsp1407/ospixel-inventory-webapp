@@ -108,10 +108,10 @@ document.addEventListener("DOMContentLoaded", function () {
   //Load data with datatables plugin
   tblHistory = $("#tblHistory").DataTable({
     ajax: {
-      url: base_url + "sales/list",
+      url: base_url + "quotes/list",
       dataSrc: "",
     },
-    columns: [{ data: "date" }, { data: "time" }, { data: "total" }, { data: "name" }, { data: "serie" }, { data: "payment_method" }, { data: "actions" }],
+    columns: [{ data: "date" }, { data: "time" }, { data: "total" }, { data: "name" }, { data: "validity" }, { data: "method" }, { data: "actions" }],
     language: {
       url: base_url + "assets/js/spanish.json",
     },
@@ -166,7 +166,7 @@ function showProducts() {
   }
 }
 
-function viewReport(idSale) {
+function viewReport(idQuote) {
   Swal.fire({
     title: "¿Desea generar el reporte?",
     showDenyButton: true,
@@ -176,10 +176,10 @@ function viewReport(idSale) {
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
-      const route = base_url + "sales/report/receipt/" + idSale;
+      const route = base_url + "quotes/report/receipt/" + idQuote;
       window.open(route, "_blank");
     } else if (result.isDenied) {
-      const route = base_url + "sales/report/invoice/" + idSale;
+      const route = base_url + "quotes/report/invoice/" + idQuote;
       window.open(route, "_blank");
     }
   });

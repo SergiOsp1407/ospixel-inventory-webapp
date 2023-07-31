@@ -146,6 +146,11 @@ table, th, td{
     font-size: 14px;
 }
 
+.paymentMethod{
+    font-size: 13px;
+    text-align: center;
+}
+
 .message{
     margin-top: 10px;
     font-size: 13px;

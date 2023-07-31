@@ -121,4 +121,16 @@ class Quotes extends Controller{
             $dompdf->stream('Factura.pdf', array('Attachment' => false));
         }
     }
+
+    public function list() {
+
+        $data = $this->model->getQuotes();
+        for ($i=0; $i < count($data); $i++) { 
+            $data[$i]['actions'] = '<a class="btn btn-danger" href="#" onclick="viewReport(' . $data[$i]['id'] . ')"><i class="fas fa-file-pdf"></i></a>';
+        }
+
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        die();
+        
+    }
 }

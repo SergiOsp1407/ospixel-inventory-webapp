@@ -142,8 +142,8 @@
                                 <th>Hora</th> <!-- time -->
                                 <th>Total</th> <!-- total -->
                                 <th>Cliente</th> <!-- id_client -->
-                                <th>Serie</th> <!-- serie -->
-                                <th>Método</th> <!-- payment_method -->
+                                <th>Validez</th> <!-- validity -->
+                                <th>Método</th> <!-- method -->
                                 <th></th>
                             </tr>
                         </thead>

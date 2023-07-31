@@ -30,8 +30,14 @@ class QuotesModel extends Query{
 
         $sql = "SELECT ct.*, cl.identity_type, cl.client_identity, cl.name, cl.phone, cl.address FROM quotes ct INNER JOIN clients cl ON ct.id_client = cl.id WHERE ct.id = $idQuote";
         return $this->select($sql);
-
                 
+    }
+
+    public function getQuotes() {
+
+        $sql = "SELECT ct.*, cl.name FROM quotes ct INNER JOIN clients cl ON ct.id_client = cl.id";
+        return $this->selectAll($sql);
+        
     }
 
     // //Update stock

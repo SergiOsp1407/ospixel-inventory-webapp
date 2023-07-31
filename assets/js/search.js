@@ -113,8 +113,7 @@ function searchProduct(value) {
 }
 
 //Add products to localStorage
-function addProduct(idProduct, quantity, actualStock) {
-  
+function addProduct(idProduct, quantity, actualStock) {  
 
   if (localStorage.getItem(nameKey) == null) {
     listShoppingCart = [];
@@ -136,9 +135,7 @@ function addProduct(idProduct, quantity, actualStock) {
     
     for (let i = 0; i < listShoppingCart.length; i++) {
       if (listShoppingCart[i]["id"] == idProduct) {
-        listShoppingCart[i]["quantity"] = parseInt(
-          listShoppingCart[i]["quantity"] + 1
-        );
+        listShoppingCart[i]["quantity"] = parseInt(listShoppingCart[i]["quantity"]) + 1;
         localStorage.setItem(nameKey, JSON.stringify(listShoppingCart));
         customAlert("success", "Producto agregado");
         showProducts();
