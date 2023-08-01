@@ -7,44 +7,42 @@ require 'vendor/autoload.php';
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
 
-class Quotes extends Controller{
+class Reservations extends Controller{
     public function __construct() {
         parent::__construct();
         session_start();
     }
 
     public function index() {
-
-        $data['title'] = 'Cotizaciones';
-        $data['script'] = 'quotes.js';
+        $data['script'] = 'reservations.js';
+        $data['title'] = 'Reservaciones';
         $data['search'] = 'search.js';
-        $data['cart'] = 'posQuotes';
-        $this->views->getView('quotes', 'index', $data);
+        $data['cart'] = 'posReservations';
+        $this->views->getView('reservations', 'index', $data);
         
     }
 
-    public function registerQuote() {
+    public function registerReservation() {
 
         $json = file_get_contents('php://input');
         $dataSet = json_decode($json, true);
         $array['products'] = array();
         $total = 0;
-        if (!empty($dataSet['products'])) {
-            
-            $date = date('Y-m-d');
-            $time = date('H:i:s');
-            $method = $dataSet['method'];
-            $validity = $dataSet['validity'];
-                        
-            $discount = (!empty($dataSet['discount'])) ? $dataSet['discount'] : 0;
+        if (!empty($dataSet['products'])) {            
+            $date_reservation = $dataSet['date_reservation']. ' ' .date('H:i:s');
+            $date_retirement = $dataSet['date_retirement'];
+            $partialPayment = $dataSet['partialPayment'];
+            $color = $dataSet['color'];
             $idClient = $dataSet['idClient'];
             
             if (empty($idClient)) {
                 $response = array('msg' => 'El cliente es necesario', 'type' => 'warning');
-            } else if (empty($method)) {
-                $response = array('msg' => 'El método de pago es necesaria', 'type' => 'warning');
-            } else if (empty($validity)) {
-                $response = array('msg' => 'El tiempo de validez de la cotización es necesaria', 'type' => 'warning');
+            } else if (empty($date_reservation)) {
+                $response = array('msg' => 'La fecha de reserva es necesaria', 'type' => 'warning');
+            } else if (empty($date_retirement)) {
+                $response = array('msg' => 'La fecha de reserva retiro del producto es necesaria', 'type' => 'warning');
+            } else if (empty($partialPayment)) {
+                $response = array('msg' => 'El valor del abono es necesario', 'type' => 'warning');
             } else {
                 foreach ($dataSet['products'] as $product) {
                     $result = $this->model->getProduct($product['id']);
@@ -58,11 +56,11 @@ class Quotes extends Controller{
                 }
 
                 $productsData = json_encode($array['products']);
-                $quote = $this->model->registerQuote($productsData, $total, $date, $time, $method, $validity, $discount, $idClient);
-                if ($quote > 0) {
-                    $response = array('msg' => 'Cotización realizada', 'type' => 'success', 'idQuote' => $quote);
+                $reservation = $this->model->registerReservation($productsData, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
+                if ($reservation > 0) {
+                    $response = array('msg' => 'Reservación realizada', 'type' => 'success', 'idReservation' => $reservation);
                 } else {
-                    $response = array('msg' => 'Error al generar la cotización', 'type' => 'error');
+                    $response = array('msg' => 'Error al generar la reservación', 'type' => 'error');
                 }
             }
         } else {
@@ -80,18 +78,18 @@ class Quotes extends Controller{
         ob_start();
         $array = explode(',', $dataSet);
         $type = $array[0];
-        $idQuote = $array[1];
+        $idReservation = $array[1];
     
         $data['title'] = 'Reporte';
         $data['company'] = $this->model->getCompany();
-        $data['quote'] = $this->model->getQuote($idQuote);
+        $data['reservation'] = $this->model->getReservation($idReservation);
     
         //Condition for 'Page not found' error
-        if (empty($data['quote'])) {
+        if (empty($data['reservation'])) {
             echo 'Pagina no encontrada';
             exit;
         }
-        $this->views->getView('quotes', $type, $data);
+        $this->views->getView('reservations', $type, $data);
         $html = ob_get_clean();
     
         // instantiate and use the dompdf class
@@ -120,18 +118,6 @@ class Quotes extends Controller{
         } else {
             $dompdf->stream('Factura.pdf', array('Attachment' => false));
         }
-    }
-
-    public function list() {
-
-        $data = $this->model->getQuotes();
-        for ($i=0; $i < count($data); $i++) { 
-            $data[$i]['actions'] = '<a class="btn btn-danger" href="#" onclick="viewReport(' . $data[$i]['id'] . ')"><i class="fas fa-file-pdf"></i></a>';
-        }
-
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
-        die();
-        
     }
 }
 

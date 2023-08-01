@@ -127,6 +127,9 @@
 <script src="<?php echo BASE_URL; ?>assets/js/ckeditor.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/functions.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/jquery-ui.min.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/fullcalendar/js/main.min.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/es.global.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/es.global.min.js"></script>
 <script>
     const base_url = '<?php echo BASE_URL; ?>';
 </script>
