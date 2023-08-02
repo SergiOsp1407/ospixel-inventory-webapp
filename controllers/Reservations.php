@@ -28,9 +28,10 @@ class Reservations extends Controller{
         $dataSet = json_decode($json, true);
         $array['products'] = array();
         $total = 0;
-        if (!empty($dataSet['products'])) {            
+        if (!empty($dataSet['products'])) {      
+            $date_create = date('Y-m-d');      
             $date_reservation = $dataSet['date_reservation']. ' ' .date('H:i:s');
-            $date_retirement = $dataSet['date_retirement'];
+            $date_retirement = $dataSet['date_retirement'] . ' 23:59:59';
             $partialPayment = $dataSet['partialPayment'];
             $color = $dataSet['color'];
             $idClient = $dataSet['idClient'];
@@ -56,7 +57,7 @@ class Reservations extends Controller{
                 }
 
                 $productsData = json_encode($array['products']);
-                $reservation = $this->model->registerReservation($productsData, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
+                $reservation = $this->model->registerReservation($productsData, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
                 if ($reservation > 0) {
                     $response = array('msg' => 'Reservación realizada', 'type' => 'success', 'idReservation' => $reservation);
                 } else {
@@ -118,6 +119,55 @@ class Reservations extends Controller{
         } else {
             $dompdf->stream('Factura.pdf', array('Attachment' => false));
         }
+    }
+
+    public function list() {
+        $data = $this->model->getReservations();
+        for ($i=0; $i < count($data); $i++) { 
+            $status = ($data[$i]['status'] == 0) ? 'Completado' : 'Pendiente' ;
+
+            $data[$i]['title'] = $status . ' - ' . $data[$i]['name'];
+            $data[$i]['start'] = $data[$i]['date_reservation'];
+            $data[$i]['end'] = $data[$i]['date_retirement'];
+        }
+        echo json_encode($data);
+        die();
+    }
+
+    public function showData($idReservation) {
+        $data = $this->model->getReservation($idReservation);
+        echo json_encode($data);
+        die();        
+    }
+
+    public function processRetirement($idReservation) {
+        $reservation = $this->model->getReservation($idReservation);
+        $data = $this->model->processRetirement($reservation['total'], 0,$idReservation);
+        if ($data == 1) {
+            $response = array('msg' => 'Procesado con éxito', 'type' => 'success');
+        } else {
+            $response = array('msg' => 'Error al procesar', 'type' => 'error');
+        }
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        die();   
+        
+    }
+
+    public function listHistory() {
+        $data = $this->model->getReservations();
+        for ($i=0; $i < count($data); $i++) {
+            if ($data[$i]['status'] == 0) {
+                $data[$i]['status'] = '<span class="badge bg-success">Completado</span>';
+            } else {
+                $data[$i]['status'] = '<span class="badge bg-danger">Pendiente</span>';
+            }
+            
+            $data[$i]['name'] = '<span class="badge" style="background: '.$data[$i]['color'].';">'.$data[$i]['name'].'</span>';
+            $data[$i]['actions'] = '<a class="btn btn-danger" href="#" onclick="viewReport('.$data[$i]['id'].')"><i class="fas fa-file-pdf"></i></a>';
+        }
+        echo json_encode($data);
+        die();
     }
 }
 

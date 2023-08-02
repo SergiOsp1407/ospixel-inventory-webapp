@@ -11,10 +11,10 @@ class ReservationsModel extends Query{
         
     }
 
-    public function registerReservation($products, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient) {
+    public function registerReservation($products, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient) {
 
-        $sql = "INSERT INTO reservations (products, date_reservation, date_retirement, partialPayment, total, color, id_client) VALUES (?,?,?,?,?,?,?)";
-        $array = array($products, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
+        $sql = "INSERT INTO reservations (products, date_create, date_reservation, date_retirement, partialPayment, total, color, id_client) VALUES (?,?,?,?,?,?,?,?)";
+        $array = array($products, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
         return $this->insert($sql, $array);
         
     }
@@ -33,12 +33,19 @@ class ReservationsModel extends Query{
                 
     }
 
-    // public function getQuotes() {
+    public function getReservations() {
 
-    //     $sql = "SELECT ct.*, cl.name FROM quotes ct INNER JOIN clients cl ON ct.id_client = cl.id";
-    //     return $this->selectAll($sql);
-        
-    // }
+        $sql = "SELECT ap.*, cl.client_identity, cl.name FROM reservations ap INNER JOIN clients cl ON ap.id_client = cl.id";
+        return $this->selectAll($sql);
+                
+    }
 
+    public function processRetirement($partialPayment, $status, $idReservation) {
+        $sql = "UPDATE reservations SET partialPayment = ?, status = ? WHERE id = ?";
+        $array = array($partialPayment, $status, $idReservation);
+        return $this->save($sql, $array);
+    }
+
+    
 }
 ?>

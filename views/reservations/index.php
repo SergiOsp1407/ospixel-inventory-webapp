@@ -13,6 +13,7 @@
                 <h5 class="card-title text-center"><i class="fa-solid fa-list-alt"></i> Reservas</h5>
                 <hr>
                 <div id='calendar'></div>
+                <input type="hidden" id="actualDate" value="<?php echo date('Y-m-d'); ?>">
             </div>
             <div class="tab-pane fade p-3" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab" tabindex="0">
                 <div class="d-flex justify-content-center mb-3">
@@ -25,12 +26,32 @@
                         <input id="until" class="form-control" type="date">
                     </div>
                 </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle nowrap" id="tblHistory" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th> <!-- date_create -->
+                                <th>Client</th> <!-- name -->
+                                <th>Abono</th> <!-- partialPayment -->
+                                <th>Total</th> <!-- total -->
+                                <th>Fecha reserva</th> <!-- date_reservation -->
+                                <th>Fecha retiro</th> <!-- date_retirement -->
+                                <th>Estado</th> <!-- status -->
+                                <th></th>
+                            </tr>
+                        </thead>
 
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
     </div>
 </div>
+
+
 
 <div id="modalReservation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -150,6 +171,48 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalRetirement" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Procesar entrega</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="idReservation">
+                <label>Cliente</label>
+                <div class="input-group mb-2">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input class="form-control" type="text" id="clientReservation" disabled>
+                </div>
+
+                <label>Monto abonado</label>
+                <div class="input-group mb-2">
+                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    <input class="form-control" type="text" id="partialPaymentRet" disabled>
+                </div>
+
+                <label>Total</label>
+                <div class="input-group mb-2">
+                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    <input class="form-control" type="text" id="total" disabled>
+                </div>
+
+                <label>Saldo pendiente</label>
+                <div class="input-group mb-2">
+                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    <input class="form-control" type="text" id="missingToPay" disabled>
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-primary" type="button" id="btnProcess">Procesar</button>
+                </div>
+
             </div>
         </div>
     </div>

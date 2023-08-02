@@ -1,4 +1,5 @@
 const modalReservation = new bootstrap.Modal("#modalReservation");
+const modalRetirement = new bootstrap.Modal("#modalRetirement");
 const date_reservation = document.querySelector("#date_reservation");
 const date_retirement = document.querySelector("#date_retirement");
 const partialPayment = document.querySelector("#partialPayment");
@@ -10,6 +11,14 @@ const idClient = document.querySelector("#idClient");
 const clientPhone = document.querySelector("#phone");
 const clientAddress = document.querySelector("#address");
 
+const idReservation = document.querySelector("#idReservation");
+const clientReservation = document.querySelector("#clientReservation");
+const partialPaymentRet = document.querySelector("#partialPaymentRet");
+const total = document.querySelector("#total");
+const missingToPay = document.querySelector("#missingToPay");
+
+const btnProcess = document.querySelector("#btnProcess");
+
 document.addEventListener("DOMContentLoaded", function () {
   var calendarEl = document.getElementById("calendar");
   var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -19,14 +28,75 @@ document.addEventListener("DOMContentLoaded", function () {
       right: "dayGridMonth,timeGridWeek,timeGridDay",
     },
     locale: "es",
+    events: base_url + "reservations/list",
     dateClick: function (info) {
-      console.log(info.dateStr);
-      date_reservation.value = info.dateStr;
-      date_retirement.setAttribute("min", date_reservation.value);
-      modalReservation.show();
+      const actualDate = document.querySelector("#actualDate").value;
+      if (actualDate > info.dateStr) {
+        customAlert("warning", "Fecha pasada");
+        return;
+      } else {
+        date_reservation.value = info.dateStr;
+        date_retirement.setAttribute("min", date_reservation.value);
+        modalReservation.show();
+      }
+    },
+    eventClick: function (info) {
+      const url = base_url + "reservations/showData/" + info.event.id;
+      //Create an instance of XMLHttpRequest
+      const http = new XMLHttpRequest();
+      //Open connection - POST - GET
+      http.open("GET", url, true);
+      //Sen data
+      http.send();
+      //Check status
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const response = JSON.parse(this.responseText);
+          const totalMissing =
+            parseFloat(response.total) - parseFloat(response.partialPayment);
+          idReservation.value = response.id;
+          clientReservation.value = response.name;
+          partialPaymentRet.value = response.partialPayment;
+          total.value = response.total;
+          missingToPay.value = totalMissing.toFixed(2);
+          modalRetirement.show();
+        }
+      };
     },
   });
   calendar.render();
+
+  btnProcess.addEventListener("click", function () {
+    Swal.fire({
+      title: "¿Deseas procesar la entrega?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, procesar!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url =
+          base_url + "reservations/processRetirement/" + idReservation.value;
+        //Create an instance of XMLHttpRequest
+        const http = new XMLHttpRequest();
+        //Open connection - POST - GET
+        http.open("GET", url, true);
+        //Sen data
+        http.send();
+        //Check status
+        http.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            const response = JSON.parse(this.responseText);
+            customAlert(response.type, response.msg);
+            triggerPdf(idReservation.value);
+            idReservation.value = "";
+            modalRetirement.hide();
+          }
+        };
+      }
+    });
+  });
 
   //Load data from localStorage
   showProducts();
@@ -66,7 +136,10 @@ document.addEventListener("DOMContentLoaded", function () {
       customAlert("warning", "La fecha de reserva es necesaria");
       return;
     } else if (date_retirement.value == "") {
-      customAlert("warning", "La fecha de reserva retiro del producto es necesaria");
+      customAlert(
+        "warning",
+        "La fecha de reserva retiro del producto es necesaria"
+      );
       return;
     } else if (partialPayment.value == "") {
       customAlert("warning", "El valor del abono es necesario");
@@ -85,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
           date_reservation: date_reservation.value,
           date_retirement: date_retirement.value,
           partialPayment: partialPayment.value,
-          color: color.value
+          color: color.value,
         })
       );
       //Check status
@@ -96,31 +169,36 @@ document.addEventListener("DOMContentLoaded", function () {
           customAlert(response.type, response.msg);
           if (response.type == "success") {
             localStorage.removeItem(nameKey);
-            setTimeout(() => {
-              Swal.fire({
-                title: "¿Desea generar el reporte?",
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: "Recibo",
-                denyButtonText: `Factura`,
-              }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                  const route =
-                    base_url + "reservations/report/receipt/" + response.idReservation;
-                  window.open(route, "_blank");
-                } else if (result.isDenied) {
-                  const route =
-                    base_url + "reservations/report/invoice/" + response.idReservation;
-                  window.open(route, "_blank");
-                }
-                window.location.reload();
-              });
-            }, 2000);
+            triggerPdf(response.idReservation);
           }
         }
       };
     }
+  });
+
+  //Load data with datatables plugin
+  tblHistory = $("#tblHistory").DataTable({
+    ajax: {
+      url: base_url + "reservations/listHistory",
+      dataSrc: "",
+    },
+    columns: [
+      { data: "date_create" },
+      { data: "name" },
+      { data: "partialPayment" },
+      { data: "total" },
+      { data: "date_reservation" },
+      { data: "date_retirement" },
+      { data: "status" },
+      { data: "actions" },
+    ],
+    language: {
+      url: base_url + "assets/js/spanish.json",
+    },
+    dom,
+    buttons,
+    responsive: true,
+    order: [[0, "asc"]],
   });
 });
 
@@ -167,4 +245,45 @@ function showProducts() {
                 <td colspan="5" class="text-center">Carrito vacío</td>
                 </tr>`;
   }
+}
+
+function triggerPdf(idReservation) {
+  setTimeout(() => {
+    Swal.fire({
+      title: "¿Desea generar el reporte?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Recibo",
+      denyButtonText: `Factura`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        const route = base_url + "reservations/report/receipt/" + idReservation;
+        window.open(route, "_blank");
+      } else if (result.isDenied) {
+        const route = base_url + "reservations/report/invoice/" + idReservation;
+        window.open(route, "_blank");
+      }
+      window.location.reload();
+    });
+  }, 2000);
+}
+
+function viewReport(idReservation) {
+  Swal.fire({
+    title: "¿Desea generar el reporte?",
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: "Recibo",
+    denyButtonText: `Factura`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      const route = base_url + "reservations/report/receipt/" + idReservation;
+      window.open(route, "_blank");
+    } else if (result.isDenied) {
+      const route = base_url + "reservations/report/invoice/" + idReservation;
+      window.open(route, "_blank");
+    }
+  });
 }

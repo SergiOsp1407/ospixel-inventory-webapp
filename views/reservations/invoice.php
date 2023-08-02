@@ -36,7 +36,7 @@
     <table id="container-info">
         <tr>
             <td>
-                <strong><?php echo $data['reservation']['identity_type'];?> :</strong>
+                <strong><?php echo $data['reservation']['identity_type']; ?> :</strong>
                 <p><?php echo $data['reservation']['client_identity']; ?></p>
             </td>
             <td>
@@ -82,8 +82,14 @@
                 <td class="text-left"><?php echo number_format($data['reservation']['total'], 2); ?></td>
             </tr>
         </tbody>
-    </table>    
+    </table>
     <div class="message">
+        <?php if ($data['reservation']['status'] == 0) { ?>
+            <h1 style="color: red;">Productos entregados</h1>
+        <?php } else { ?> 
+            <h1 style="color: red;">Productos pendientes por recoger</h1>
+        <?php } ?>
+
         <?php echo $data['company']['message']; ?>
     </div>
 </body>

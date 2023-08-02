@@ -50,7 +50,7 @@
             </tr>
             <tr>
                 <td class="text-right" colspan="2">Fecha Reservación</td>
-                <td class="text-left"  colspan="2"><?php echo $data['reservation']['date_reservation']; ?></td>
+                <td class="text-left" colspan="2"><?php echo $data['reservation']['date_reservation']; ?></td>
             </tr>
             <tr>
                 <td class="text-right" colspan="2">Fecha Retiro</td>
@@ -59,6 +59,13 @@
         </tbody>
     </table>
     <div class="message">
+        <?php if ($data['reservation']['status'] == 0) { ?>
+            <h1 style="color: red;">Productos entregados</h1>
+        <?php } else { ?>
+            <h1 style="color: red;">Productos pendientes por recoger</h1>
+        <?php } ?>
+
+
         <?php echo $data['company']['message']; ?>
     </div>
 </body>
