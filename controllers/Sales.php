@@ -79,6 +79,12 @@ class Sales extends Controller
                 $productsData = json_encode($array['products']);
                 $sale = $this->model->registerSale($productsData, $total, $date, $time, $paymentMethod, $discount, $serie[0], $idClient, $this->id_user);
                 if ($sale > 0) {
+                    foreach ($dataSet['products'] as $product) {
+                        $transaction = 'Venta N°: ' . $sale;
+                        $quantity = $product['quantity'];
+                        $this->model->recordTransaction($transaction, 'output', $quantity, $product['id'], $this->id_user);
+                    }
+
                     if ($paymentMethod == 'credito') {
                         $valueCredit = $total - $discount;
                         $this->model->registerCredits($valueCredit, $date, $time, $sale);
@@ -86,6 +92,7 @@ class Sales extends Controller
                     // if ($dataSet['print']) {
                     //     $this->directPrinting($sale);
                     // }
+
                     $response = array('msg' => 'Venta realizada', 'type' => 'success', 'idSale' => $sale);
                 } else {
                     $response = array('msg' => 'Error al generar la venta', 'type' => 'error');
@@ -182,6 +189,10 @@ class Sales extends Controller
                     //Update stock
                     $newQuantity = $result['quantity'] + $product['quantity'];
                     $this->model->updateStock($newQuantity, $product['id']);
+
+                    //Transactions of products for inventory
+                    $transaction = 'Devolución Venta N°: ' . $idSale;
+                    $this->model->recordTransaction($transaction, 'input', $product['quantity'], $product['id'], $this->id_user);
                 }
                 if ($resultSale['payment_method'] == 'credito') {
                     $this->model->cancelCredit($idSale);

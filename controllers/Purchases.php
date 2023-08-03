@@ -66,6 +66,10 @@ class Purchases extends Controller
                 $productsData = json_encode($array['products']);
                 $purchase = $this->model->registerPurchase($productsData, $total, $date, $time, $serie, $idSupplier, $this->id_user);
                 if ($purchase > 0) {
+                    foreach ($dataSet['products'] as $product) {
+                        $transaction = 'Compra N°: ' . $purchase;
+                        $this->model->recordTransaction($transaction, 'input', $product['quantity'], $product['id'], $this->id_user);
+                    }
                     $response = array('msg' => 'Compra realizada', 'type' => 'success', 'idPurchase' => $purchase);
                 } else {
                     $response = array('msg' => 'Error al generar la compra', 'type' => 'error');
@@ -121,8 +125,8 @@ class Purchases extends Controller
 
         // Output the generated PDF to Browser
         if ($type == 'receipt') {
-            $dompdf->stream('Tirilla.pdf', array('Attachment' => false));            
-        } else {            
+            $dompdf->stream('Tirilla.pdf', array('Attachment' => false));
+        } else {
             $dompdf->stream('Factura.pdf', array('Attachment' => false));
         }
     }
@@ -137,7 +141,7 @@ class Purchases extends Controller
                 <a class="btn btn-warning" href="#" onclick="cancelPurchase(' . $data[$i]['id'] . ')"><i class="fas fa-trash"></i></a>            
                 <a class="btn btn-danger" href="#" onclick="viewReport(' . $data[$i]['id'] . ')"><i class="fas fa-file-pdf"></i></a>            
                 </div>';
-            }else {                
+            } else {
                 $data[$i]['actions'] = '<div>
                 <span class="badge bg-dark">Anulado</span>
                 <a class="btn btn-danger" href="#" onclick="viewReport(' . $data[$i]['id'] . ')"><i class="fas fa-file-pdf"></i></a>            
@@ -162,6 +166,10 @@ class Purchases extends Controller
                     //Update stock
                     $newQuantity = $result['quantity'] - $product['quantity'];
                     $this->model->updateStock($newQuantity, $product['id']);
+
+                    //Transactions of products for inventory
+                    $transaction = 'Devolución Compra N°: ' . $idPurchase;
+                    $this->model->recordTransaction($transaction, 'output', $product['quantity'], $product['id'], $this->id_user);
                 }
                 $response = array('msg' => 'Compra anulada', 'type' => 'success');
             } else {

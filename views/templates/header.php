@@ -102,7 +102,7 @@
                     <a href="widgets.html">
                         <div class="parent-icon"><i class="bi bi-plus-slash-minus"></i>
                         </div>
-                        <div class="menu-title">Cajas/Balances</div>
+                        <div class="menu-title">Cajas | Balances</div>
                     </a>
                 </li>
                 <li>
@@ -141,10 +141,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="widgets.html">
+                    <a href="<?php echo BASE_URL . 'inventory'; ?>">
                         <div class="parent-icon"><i class="fa-solid fa-boxes-stacked"></i>
                         </div>
-                        <div class="menu-title">Inventario</div>
+                        <div class="menu-title">Inventario | Kardex</div>
                     </a>
                 </li>
 

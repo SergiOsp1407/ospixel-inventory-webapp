@@ -75,5 +75,14 @@ class SalesModel extends Query{
         
     }    
 
+    //Transactions of products for inventory
+    public function recordTransaction($transaction, $action, $quantity, $idProduct, $id_user) {
+
+        $sql = "INSERT INTO inventory (transaction, action, quantity, id_product, id_user) VALUES (?,?,?,?,?)";
+        $array = array($transaction, $action, $quantity, $idProduct, $id_user);
+        return $this->insert($sql, $array);
+        
+    }
+
 }
 ?>
