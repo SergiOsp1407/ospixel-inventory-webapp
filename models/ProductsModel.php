@@ -60,7 +60,7 @@ class ProductsModel extends Query{
 
     public function searchByCode($value) {
 
-        $sql = "SELECT id, quantity FROM products WHERE code = '$value'";
+        $sql = "SELECT id, description, quantity FROM products WHERE code = '$value'";
         return $this->select($sql);
         
     }
