@@ -18,6 +18,36 @@ class InventoryModel extends Query{
         
     }
 
+    public function getProduct($idProduct) {
+
+        $sql = "SELECT * FROM products WHERE id = $idProduct";
+        return $this->select($sql);
+
+    }
+
+    public function processAdjustment($quantity, $idProduct) {
+        $sql = "UPDATE products SET quantity = ? WHERE id = ?";
+        $array = array($quantity, $idProduct);
+        return $this->save($sql, $array);
+    }
+
+    //Transactions of products for inventory
+    public function recordTransaction($transaction, $action, $quantity, $idProduct, $id_user) {
+
+        $sql = "INSERT INTO inventory (transaction, action, quantity, id_product, id_user) VALUES (?,?,?,?,?)";
+        $array = array($transaction, $action, $quantity, $idProduct, $id_user);
+        return $this->insert($sql, $array);
+        
+    }
+
+    public function getKardex($idProduct, $id_user) {
+        $sql = "SELECT i.action, i.quantity, i.date, p.description, p.quantity AS stock_actual FROM inventory i INNER JOIN products p ON i.id_product = p.id WHERE i.id_product = $idProduct AND i.id_user = $id_user";
+        return $this->selectAll($sql);
+
+
+        
+    }
+
     public function getCompany() {
 
         $sql = "SELECT * FROM configuration";

@@ -12,6 +12,15 @@ const descriptionAdjustment = document.querySelector("#descriptionAdjustment");
 
 const quantityAdjustment = document.querySelector("#quantityAdjustment");
 const idProductAdjustment = document.querySelector("#idProductAdjustment");
+const btnProcess = document.querySelector("#btnProcess");
+
+//Kardex
+const inputSearchByCode = document.querySelector("#searchByProductCode");
+const inputSearchByName = document.querySelector("#searchByProductName");
+const barCode = document.querySelector("#barCode");
+const description = document.querySelector("#description");
+const containerCode = document.querySelector("#containerCode");
+const containerName = document.querySelector("#containerName");
 
 const containerCodeAdjustment = document.querySelector(
   "#containerCodeAdjustment"
@@ -44,8 +53,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  //Adjusting inventory
+  //Modal Adjusting inventory
   btnAdjustment.addEventListener("click", function () {
+    idProductAdjustment.value = "";
+    searchCodeAdjustment.value = "";
+    searchNameAdjustment.value = "";
+    quantityAdjustment.value = "";
     modalAdjustment.show();
   });
 
@@ -93,6 +106,82 @@ document.addEventListener("DOMContentLoaded", function () {
       idProductAdjustment.value = ui.item.id;
       quantityAdjustment.focus();
     },
+  });
+
+  //Process inventory adjustment
+  btnProcess.addEventListener("click", function () {
+    if (idProductAdjustment.value == "" && searchNameAdjustment.value == "") {
+      customAlert("warning", "No has seleccionado ningún producto");
+    } else if (quantityAdjustment.value == "") {
+      customAlert("warning", "La cantidad es necesaria");
+    } else {
+      const url = base_url + "inventory/processAdjustment";
+      //Create an instance of XMLHttpRequest
+      const http = new XMLHttpRequest();
+      //Open connection - POST - GET
+      http.open("POST", url, true);
+      //Sen data
+      http.send(
+        JSON.stringify({
+          idProduct: idProductAdjustment.value,
+          quantity: quantityAdjustment.value,
+        })
+      );
+      //Check status
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+          const response = JSON.parse(this.responseText);
+          customAlert(response.type, response.msg);
+          if (response.type == "success") {
+            modalAdjustment.hide();
+            loadInventory(base_url + "inventory/listTransactions");
+          }
+        }
+      };
+    }
+  });
+
+  //Kardex
+  //Show input for search by description
+  description.addEventListener("click", function () {
+    containerCode.classList.add("d-none");
+    containerName.classList.remove("d-none");
+    inputSearchByName.value = "";
+    inputSearchByName.focus();
+  });
+
+  //Show input for search by code
+  barCode.addEventListener("click", function () {
+    containerName.classList.add("d-none");
+    containerCode.classList.remove("d-none");
+    inputSearchByCode.value = "";
+    inputSearchByCode.focus();
+  });
+
+  inputSearchByCode.addEventListener("keyup", function (e) {
+    if (e.keyCode === 13) {
+      const url = base_url + "products/searchByCode/" + e.target.value;
+      //Create an instance of XMLHttpRequest
+      const http = new XMLHttpRequest();
+      //Open connection - POST - GET
+      http.open("GET", url, true);
+      //Sen data
+      http.send();
+      //Check status
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const response = JSON.parse(this.responseText);
+          if (response.status) {
+            const route = base_url + 'inventory/kardex/' + response.dataSet.id;
+            window.open(route, '_blank');
+          } else {
+            customAlert("warning", "Código no encontrado");
+          }
+        }
+      };
+    }
+    return;
   });
 });
 

@@ -123,9 +123,9 @@
                 <label for="quantityAdjustment">Cantidad para ajustar:</label>
                 <div class="d-flex justify-content-between">
                     <div class="form-group">                        
-                        <input id="quantityAdjustment" class="form-control" type="text" placeholder="Cantidad">
+                        <input id="quantityAdjustment" class="form-control" type="number" placeholder="Cantidad">
                     </div>
-                    <button class="btn btn-primary" type="button">Procesar</button>
+                    <button class="btn btn-primary" type="button" id="btnProcess">Procesar</button>
                 </div>
             </div>
         </div>

@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem(nameKey) != null) {
     listShoppingCart = JSON.parse(localStorage.getItem(nameKey));
   }
+  
   //Show input for search by description
   description.addEventListener("click", function () {
     containerCode.classList.add("d-none");
