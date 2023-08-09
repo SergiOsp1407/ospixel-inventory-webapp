@@ -99,7 +99,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="widgets.html">
+                    <a href="<?php echo BASE_URL . 'cashdesk'; ?>">
                         <div class="parent-icon"><i class="bi bi-plus-slash-minus"></i>
                         </div>
                         <div class="menu-title">Cajas | Balances</div>
