@@ -16,14 +16,14 @@ use Dompdf\Dompdf;
 class Sales extends Controller
 {
     private $id_user;
-    
+
     public function __construct()
     {
         parent::__construct();
         session_start();
         $this->id_user = $_SESSION['id_user'];
     }
-    
+
     public function index()
     {
         $data['title'] = 'Ventas';
@@ -35,27 +35,27 @@ class Sales extends Controller
         $data['serie'] = $this->generate_numbers($serie, 1, 8);
         $this->views->getView('sales', 'index', $data);
     }
-    
+
     public function registerSale()
     {
-        
+
         $json = file_get_contents('php://input');
         $dataSet = json_decode($json, true);
         $array['products'] = array();
         $total = 0;
         if (!empty($dataSet['products'])) {
-            
+
             $date = date('Y-m-d');
             $time = date('H:i:s');
             $paymentMethod = $dataSet['paymentMethod'];
-            
+
             $resultSerie = $this->model->getSerie();
             $numSerie = ($resultSerie['total'] == null) ? 1 : $resultSerie['total'] + 1;
             $serie = $this->generate_numbers($numSerie, 1, 8);
-            
+
             $discount = (!empty($dataSet['discount'])) ? $dataSet['discount'] : 0;
             $idClient = $dataSet['idClient'];
-            
+
             if (empty($idClient)) {
                 $response = array('msg' => 'El cliente es necesario', 'type' => 'warning');
             } else if (empty($paymentMethod)) {
@@ -70,19 +70,22 @@ class Sales extends Controller
                     $subTotal = $result['sale_price'] * $product['quantity'];
                     array_push($array['products'], $data);
                     $total += $subTotal;
-
-                    //Update stock
-                    $newQuantity = $result['quantity'] - $product['quantity'];
-                    $this->model->updateStock($newQuantity, $result['id']);
                 }
 
                 $productsData = json_encode($array['products']);
                 $sale = $this->model->registerSale($productsData, $total, $date, $time, $paymentMethod, $discount, $serie[0], $idClient, $this->id_user);
                 if ($sale > 0) {
                     foreach ($dataSet['products'] as $product) {
+                        $result = $this->model->getProduct($product['id']);
+                        //Update stock
+                        $newQuantity = $result['quantity'] - $product['quantity'];
+                        $this->model->updateStock($newQuantity, $result['id']);
+
                         $transaction = 'Venta N°: ' . $sale;
                         $quantity = $product['quantity'];
-                        $this->model->recordTransaction($transaction, 'output', $quantity, $product['id'], $this->id_user);
+                        $this->model->recordTransaction($transaction, 'output', $quantity, $newQuantity, $product['id'], $this->id_user);
+
+                        
                     }
 
                     if ($paymentMethod == 'credito') {
@@ -101,11 +104,11 @@ class Sales extends Controller
         } else {
             $response = array('msg' => 'Carrito vacío', 'type' => 'warning');
         }
-        
+
         echo json_encode($response);
         die();
     }
-    
+
     //Using Dompdf for invoices and tickets
     public function report($dataSet)
     {
@@ -113,11 +116,11 @@ class Sales extends Controller
         $array = explode(',', $dataSet);
         $type = $array[0];
         $idSale = $array[1];
-    
+
         $data['title'] = 'Reporte';
         $data['company'] = $this->model->getCompany();
         $data['sale'] = $this->model->getSale($idSale);
-    
+
         //Condition for 'Page not found' error
         if (empty($data['sale'])) {
             echo 'Pagina no encontrada';
@@ -125,7 +128,7 @@ class Sales extends Controller
         }
         $this->views->getView('sales', $type, $data);
         $html = ob_get_clean();
-    
+
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
         $options = $dompdf->getOptions();
@@ -133,7 +136,7 @@ class Sales extends Controller
         $options->set('isRemoteEnabled', true);
         $dompdf->setOptions($options);
         $dompdf->loadHtml($html);
-    
+
         // (Optional) Setup the paper size and orientation
         // $dompdf->setPaper(array(0, 0, 222, 841), 'portrait');
         // $dompdf->setPaper('letter', 'portrait');
@@ -142,10 +145,10 @@ class Sales extends Controller
         } else {
             $dompdf->setPaper('A4', 'vertical');
         }
-    
+
         // Render the HTML as PDF
         $dompdf->render();
-    
+
         // Output the generated PDF to Browser
         if ($type == 'receipt') {
             $dompdf->stream('Tirilla.pdf', array('Attachment' => false));
@@ -192,7 +195,7 @@ class Sales extends Controller
 
                     //Transactions of products for inventory
                     $transaction = 'Devolución Venta N°: ' . $idSale;
-                    $this->model->recordTransaction($transaction, 'input', $product['quantity'], $product['id'], $this->id_user);
+                    $this->model->recordTransaction($transaction, 'input', $product['quantity'], $newQuantity, $product['id'], $this->id_user);
                 }
                 if ($resultSale['payment_method'] == 'credito') {
                     $this->model->cancelCredit($idSale);
@@ -211,7 +214,7 @@ class Sales extends Controller
     // //Function to print in special paper
     // public function directPrinting($idSale)
     // {
-        
+
     //     $company = $this->model->getCompany();
     //     $sale = $this->model->getSale($idSale);
 
@@ -281,7 +284,8 @@ class Sales extends Controller
     //     $printer->close();
     // }
 
-    function checkStock($idProduct) {
+    function checkStock($idProduct)
+    {
         $data = $this->model->getProduct($idProduct);
         echo json_encode($data);
         die();

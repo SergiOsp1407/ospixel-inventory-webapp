@@ -99,7 +99,7 @@ class Inventory extends Controller
                     $action = ($quantity > 0) ? 'input' : 'output' ;
                     $transaction = 'Ajuste Inventario: ' . $action;
                     
-                    $this->model->recordTransaction($transaction, $action, $quantityInventory, $idProduct, $this->id_user);
+                    $this->model->recordTransaction($transaction, $action, $quantityInventory, $newQuantity, $idProduct, $this->id_user);
                     $response = array('msg' => 'Ajuste en el stock realizado!', 'type' => 'success');
                 } else {
                     $response = array('msg' => 'Error al realizar el ajuste', 'type' => 'error');

@@ -32,16 +32,16 @@ class InventoryModel extends Query{
     }
 
     //Transactions of products for inventory
-    public function recordTransaction($transaction, $action, $quantity, $idProduct, $id_user) {
+    public function recordTransaction($transaction, $action, $quantity, $actual_stock, $idProduct, $id_user) {
 
-        $sql = "INSERT INTO inventory (transaction, action, quantity, id_product, id_user) VALUES (?,?,?,?,?)";
-        $array = array($transaction, $action, $quantity, $idProduct, $id_user);
+        $sql = "INSERT INTO inventory (transaction, action, quantity, actual_stock, id_product, id_user) VALUES (?,?,?,?,?,?)";
+        $array = array($transaction, $action, $quantity, $actual_stock, $idProduct, $id_user);
         return $this->insert($sql, $array);
         
     }
 
     public function getKardex($idProduct, $id_user) {
-        $sql = "SELECT i.action, i.quantity, i.date, p.description, p.quantity AS stock_actual FROM inventory i INNER JOIN products p ON i.id_product = p.id WHERE i.id_product = $idProduct AND i.id_user = $id_user";
+        $sql = "SELECT i.action, i.quantity, i.actual_stock, i.date, p.description FROM inventory i INNER JOIN products p ON i.id_product = p.id WHERE i.id_product = $idProduct AND i.id_user = $id_user";
         return $this->selectAll($sql);
 
 

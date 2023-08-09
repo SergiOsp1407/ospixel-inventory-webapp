@@ -55,10 +55,10 @@ class PurchasesModel extends Query{
     }
 
     //Transactions of products for inventory
-    public function recordTransaction($transaction, $action, $quantity, $idProduct, $id_user) {
+    public function recordTransaction($transaction, $action, $quantity, $actual_stock, $idProduct, $id_user) {
 
-        $sql = "INSERT INTO inventory (transaction, action, quantity, id_product, id_user) VALUES (?,?,?,?,?)";
-        $array = array($transaction, $action, $quantity, $idProduct, $id_user);
+        $sql = "INSERT INTO inventory (transaction, action, quantity, actual_stock, id_product, id_user) VALUES (?,?,?,?,?,?)";
+        $array = array($transaction, $action, $quantity, $actual_stock, $idProduct, $id_user);
         return $this->insert($sql, $array);
         
     }

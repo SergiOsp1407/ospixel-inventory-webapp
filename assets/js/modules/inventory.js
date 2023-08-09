@@ -173,8 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (this.readyState == 4 && this.status == 200) {
           const response = JSON.parse(this.responseText);
           if (response.status) {
-            const route = base_url + 'inventory/kardex/' + response.dataSet.id;
-            window.open(route, '_blank');
+            reportKardex(response.dataSet.id);
           } else {
             customAlert("warning", "Código no encontrado");
           }
@@ -182,6 +181,26 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     }
     return;
+  });
+
+  //Autocomplete products
+  $("#searchByProductName").autocomplete({
+    source: function (request, response) {
+      $.ajax({
+        url: base_url + "products/searchByName",
+        dataType: "json",
+        data: {
+          term: request.term,
+        },
+        success: function (data) {
+          response(data);
+        },
+      });
+    },
+    minLength: 2,
+    select: function (event, ui) {
+      reportKardex(ui.item.id);
+    },
   });
 });
 
@@ -230,4 +249,30 @@ function productByCode(value) {
       }
     }
   };
+}
+
+function reportKardex(idProduct) {
+  let timerInterval;
+  Swal.fire({
+    title: 'Movimientos de los productos',
+    html: "Generando reporte... <b></b> milisegundos.",
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+      const b = Swal.getHtmlContainer().querySelector("b");
+      timerInterval = setInterval(() => {
+        b.textContent = Swal.getTimerLeft();
+      }, 100);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    },
+  }).then((result) => {
+    /* Read more about handling dismissals below */
+    if (result.dismiss === Swal.DismissReason.timer) {
+      const route = base_url + "inventory/kardex/" + idProduct;
+      window.open(route, "_blank");
+    }
+  });
 }

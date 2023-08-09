@@ -58,17 +58,20 @@ class Purchases extends Controller
                     $subTotal = $result['purchase_price'] * $product['quantity'];
                     array_push($array['products'], $data);
                     $total += $subTotal;
-
-                    //Update stock
-                    $newQuantity = $result['quantity'] + $product['quantity'];
-                    $this->model->updateStock($newQuantity, $result['id']);
                 }
                 $productsData = json_encode($array['products']);
                 $purchase = $this->model->registerPurchase($productsData, $total, $date, $time, $serie, $idSupplier, $this->id_user);
                 if ($purchase > 0) {
                     foreach ($dataSet['products'] as $product) {
+                        $result = $this->model->getProduct($product['id']);
+                        //Update stock
+                        $newQuantity = $result['quantity'] + $product['quantity'];
+                        $this->model->updateStock($newQuantity, $result['id']);
+                        
                         $transaction = 'Compra N°: ' . $purchase;
-                        $this->model->recordTransaction($transaction, 'input', $product['quantity'], $product['id'], $this->id_user);
+                        $this->model->recordTransaction($transaction, 'input', $product['quantity'], $newQuantity, $product['id'], $this->id_user);
+
+                        
                     }
                     $response = array('msg' => 'Compra realizada', 'type' => 'success', 'idPurchase' => $purchase);
                 } else {
@@ -169,7 +172,7 @@ class Purchases extends Controller
 
                     //Transactions of products for inventory
                     $transaction = 'Devolución Compra N°: ' . $idPurchase;
-                    $this->model->recordTransaction($transaction, 'output', $product['quantity'], $product['id'], $this->id_user);
+                    $this->model->recordTransaction($transaction, 'output', $product['quantity'], $newQuantity, $product['id'], $this->id_user);
                 }
                 $response = array('msg' => 'Compra anulada', 'type' => 'success');
             } else {

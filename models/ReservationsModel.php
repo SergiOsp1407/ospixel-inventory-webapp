@@ -46,15 +46,21 @@ class ReservationsModel extends Query{
         return $this->save($sql, $array);
     }
 
-    //Transactions of products for inventory
-    public function recordTransaction($transaction, $action, $quantity, $idProduct, $id_user) {
+    //Update stock
+    public function updateStock($quantity, $idProduct) {
+        $sql = "UPDATE products SET quantity = ? WHERE id = ?";
+        $array = array($quantity, $idProduct);
+        return $this->save($sql, $array);
+    }
 
-        $sql = "INSERT INTO inventory (transaction, action, quantity, id_product, id_user) VALUES (?,?,?,?,?)";
-        $array = array($transaction, $action, $quantity, $idProduct, $id_user);
+    //Transactions of products for inventory
+    public function recordTransaction($transaction, $action, $quantity, $actual_stock, $idProduct, $id_user) {
+
+        $sql = "INSERT INTO inventory (transaction, action, quantity, actual_stock, id_product, id_user) VALUES (?,?,?,?,?,?)";
+        $array = array($transaction, $action, $quantity, $actual_stock, $idProduct, $id_user);
         return $this->insert($sql, $array);
         
     }
-
     
 }
 ?>

@@ -50,7 +50,7 @@
                     <td><?php echo $kardex['input']; ?></td>
                     <td><?php echo $kardex['output']; ?></td>
                     <td><?php echo $kardex['date']; ?></td>
-                    <td><?php echo $kardex['stock_actual']; ?></td>
+                    <td><?php echo $kardex['actual_stock']; ?></td>
                 </tr>
             <?php } ?>
         </tbody>

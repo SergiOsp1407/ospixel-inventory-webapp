@@ -66,9 +66,14 @@ class Reservations extends Controller
                 $reservation = $this->model->registerReservation($productsData, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
                 if ($reservation > 0) {
                     foreach ($dataSet['products'] as $product) {
+                        $result = $this->model->getProduct($product['id']);
+                        //Update stock
+                        $newQuantity = $result['quantity'] + $product['quantity'];
+                        $this->model->updateStock($newQuantity, $result['id']);
+
                         //Transactions of products for inventory
                         $transaction = 'Reservación N°: ' . $reservation;
-                        $this->model->recordTransaction($transaction, 'output', $product['quantity'], $product['id'], $this->id_user);
+                        $this->model->recordTransaction($transaction, 'output', $product['quantity'], $newQuantity,$product['id'], $this->id_user);
                     }
                     $response = array('msg' => 'Reservación realizada', 'type' => 'success', 'idReservation' => $reservation);
                 } else {
