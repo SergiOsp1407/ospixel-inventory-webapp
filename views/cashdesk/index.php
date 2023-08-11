@@ -3,13 +3,25 @@
 
 <div class="card">
     <div class="card-body">
-        <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+        <div class="alert alert-<?php echo (!empty($data['cashdesk'])) ? 'success' : 'danger'; ?> border-0 bg-<?php echo (!empty($data['cashdesk'])) ? 'success' : 'danger'; ?> alert-dismissible fade show py-2">
             <div class="d-flex align-items-center">
-                <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                <div class="font-35 text-white">
+                    <?php if (!empty($data['cashdesk'])) {
+                        echo '<i class="fa-solid fa-lock-open"></i>';
+                    } else {
+
+                        echo '<i class="fa-solid fa-lock"></i>';
+                    } ?>
                 </div>
                 <div class="ms-3">
-                    <h6 class="mb-0 text-white">Success Alerts</h6>
-                    <div class="text-white">A simple success alert—check it out!</div>
+                    <h6 class="mb-0 text-white">
+                        <?php if (!empty($data['cashdesk'])) {
+                            echo ' Caja Abierta';
+                        } else {
+
+                            echo ' Caja Cerrada';
+                        } ?></h6>
+                    <div class="text-white"><?php echo (!empty($data['cashdesk'])) ? 'Puedes empezar a registrar movimientos!' : 'Debes abrir la caja para poder registar movimientos'; ?></div>
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -21,7 +33,7 @@
             <div class="dropdown ms-auto">
                 <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                 </a>
-                <ul class="dropdown-menu">                    
+                <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href=#" data-bs-toggle="modal" data-bs-target="#modalCashdesk"><i class="fa-solid fa-box-open"></i> Apertura de caja </a>
                     </li>
                 </ul>
@@ -42,7 +54,12 @@
                     <table class="table table-bordered table-striped table-hover align-middle nowrap" id="tblOpenCloseCash" style="width: 100%;">
                         <thead class="thead-dark">
                             <tr>
-                                <th>#</th>
+                                <th>Monto Inicial</th> <!--initial_value -->
+                                <th>Fecha Apertura</th> <!--opening_date -->
+                                <th>Fecha Cierre</th> <!--closing_date -->
+                                <th>Monto Final</th> <!--final_value -->
+                                <th>Total # ventas</th> <!--total_sales_quantity -->
+                                <th>Usuario</th><!-- id_user -->
                             </tr>
                         </thead>
                         <tbody>
@@ -54,10 +71,35 @@
                 </div>
             </div>
             <div class="tab-pane fade p-3" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab" tabindex="0">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fa-solid fa-dollar-sign"></i></span>
-                    <input class="form-control" type="text" name="" placeholder="Recipient's text">
-                </div>
+                <form id="form">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Monto <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-dollar-sign"></i></span>
+                                <input class="form-control" id="value" type="text" name="value" placeholder="Monto">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="description">Descripción del producto <span class="text-danger">*</span></label>
+                                <textarea id="description" class="form-control" name="description" rows="3" placeholder="Descripción"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <div class="form-group">
+                                <label for="photo">Foto (Opcional)</label>
+                                <input id="photo" class="form-control" type="file" name="photo">
+                            </div>
+                            <div id="containerPreview">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="float-end">
+                        <button class="btn btn-primary" type="submit" id="btnRegisterExpense">Registrar</button>
+                    </div>
+                </form>
+
             </div>
             <div class="tab-pane fade p-3" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab" tabindex="0">
                 <div class="table-responsive">

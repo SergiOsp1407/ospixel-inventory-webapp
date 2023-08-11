@@ -112,11 +112,8 @@
                                 <input id="photo" class="form-control" type="file" name="photo">
                             </div>
                             <div id="containerPreview">
-
                             </div>
-
                         </div>
-
                     </div>
                     <div class="text-end">
                         <button class="btn btn-danger" type="button" id="btnNew">Nuevo</button>
