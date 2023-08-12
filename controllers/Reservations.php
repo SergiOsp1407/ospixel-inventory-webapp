@@ -63,7 +63,7 @@ class Reservations extends Controller
                 }
 
                 $productsData = json_encode($array['products']);
-                $reservation = $this->model->registerReservation($productsData, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
+                $reservation = $this->model->registerReservation($productsData, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient, $this->id_user);
                 if ($reservation > 0) {
                     foreach ($dataSet['products'] as $product) {
                         $result = $this->model->getProduct($product['id']);

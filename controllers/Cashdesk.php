@@ -86,4 +86,57 @@ class Cashdesk extends Controller
         echo json_encode($response);
         die();
     }
+
+    public function listExpenses() {
+        $data = $this->model->getExpenses();
+        for ($i=0; $i < count($data); $i++) { 
+            $data[$i]['photo'] = '<a href="'.BASE_URL.$data[$i]['photo'].'" target="_blank">
+            <img class="img-thumbnail" src="'.BASE_URL.$data[$i]['photo'].'" width="100">
+            </a>';
+        }
+        echo json_encode($data);
+        die();
+    }
+
+    public function transactions() {
+        $data = $this->getDataset();
+        $data['currency'] = CURRENCY;
+        echo json_encode($data);
+        die();
+    }
+
+    public function getDataset(){
+
+        $querySale = $this->model->getSales($this->id_user);
+        $sales = ($querySale['totalSales'] != null) ? $querySale['totalSales'] : 0;
+
+        $queryReservation = $this->model->getReservations($this->id_user);
+        $reservations = ($queryReservation['totalReservation'] != null) ? $queryReservation['totalReservation'] : 0;
+
+        $queryCredits = $this->model->getCredits($this->id_user);
+        $credits = ($queryCredits['totalCredits'] != null) ? $queryCredits['totalCredits'] : 0;
+
+        $queryPurchase = $this->model->getPurchases($this->id_user);
+        $purchases = ($queryPurchase['totalPurchases'] != null) ? $queryPurchase['totalPurchases'] : 0;
+
+        $queryExpense = $this->model->getTotalExpenses($this->id_user);
+        $expenses = ($queryExpense['totalExpenses'] != null) ? $queryExpense['totalExpenses'] : 0;
+
+        $initialAmount = $this->model->getCashdesk($this->id_user);
+
+        $data['outgoings'] = $purchases + $expenses;
+        $data['income'] = $sales + $reservations + $credits;
+        $data['initialValue'] = (!empty($initialAmount['initial_value'])) ? $initialAmount['initial_value'] : 0;
+        $data['expenses'] = $expenses;
+        $data['remainder'] = ($data['income'] + $data['initialValue']) - $data['outgoings'];
+
+        $data['outgoingsDecimal'] = number_format($data['outgoings'], 2);
+        $data['incomeDecimal'] = number_format($data['income'], 2);
+        $data['initialValueDecimal'] = number_format($data['initialValue'], 2);
+        $data['expensesDecimal'] = number_format($data['expenses'], 2);
+        $data['remainderDecimal'] = number_format($data['remainder'], 2);
+
+        return $data;        
+        
+    }
 }

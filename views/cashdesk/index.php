@@ -63,9 +63,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -74,6 +71,7 @@
                 <form id="form">
                     <div class="row">
                         <div class="col-md-4">
+                            <input type="hidden" id="id">
                             <label>Monto <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fa-solid fa-dollar-sign"></i></span>
@@ -106,25 +104,27 @@
                     <table class="table table-bordered table-striped table-hover align-middle nowrap" id="tblExpenses" style="width: 100%;">
                         <thead class="thead-dark">
                             <tr>
-                                <th>#</th>
+                                <th>Monto</th>
+                                <th>Descripción</th>
+                                <th>Foto</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="tab-pane fade p-3" id="nav-transactions" role="tabpanel" aria-labelledby="nav-transactions-tab" tabindex="0">
-                Gráfico
+                <div class="chart-container-1">
+                    <canvas id="transactionReport"></canvas>
+                </div>
+                <ul class="list-group list-group-flush" id="listTransactions">
+                </ul>
+                
             </div>
         </div>
-
     </div>
 </div>
-
 <div id="modalCashdesk" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">

@@ -11,10 +11,10 @@ class ReservationsModel extends Query{
         
     }
 
-    public function registerReservation($products, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient) {
+    public function registerReservation($products, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient, $id_user) {
 
-        $sql = "INSERT INTO reservations (products, date_create, date_reservation, date_retirement, partialPayment, total, color, id_client) VALUES (?,?,?,?,?,?,?,?)";
-        $array = array($products, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient);
+        $sql = "INSERT INTO reservations (products, date_create, date_reservation, date_retirement, partialPayment, total, color, id_client, id_user) VALUES (?,?,?,?,?,?,?,?,?)";
+        $array = array($products, $date_create, $date_reservation, $date_retirement, $partialPayment, $total, $color, $idClient, $id_user);
         return $this->insert($sql, $array);
         
     }
