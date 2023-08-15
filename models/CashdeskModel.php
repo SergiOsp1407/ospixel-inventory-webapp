@@ -32,9 +32,14 @@ class CashdeskModel extends Query{
         return $this->selectAll($sql);
     }
 
+    public function getCompany() {
+        $sql = "SELECT * FROM configuration";
+        return $this->select($sql);
+    }
+
     //Transactions
-    public function getSales($id_user) {
-        $sql = "SELECT SUM(total) AS totalSales FROM sales WHERE payment_method = 'efectivo' AND id_user = $id_user";
+    public function getSales($field, $id_user) {
+        $sql = "SELECT SUM($field) AS totalSales FROM sales WHERE payment_method = 'efectivo' AND id_user = $id_user";
         return $this->select($sql);
     }
 
@@ -43,8 +48,8 @@ class CashdeskModel extends Query{
         return $this->select($sql);
     }
 
-    public function getCredits($id_user) {
-        $sql = "SELECT SUM(c.value_credit) AS totalCredits FROM credits c INNER JOIN sales v ON c.id_sale = v.id AND v.id_user = $id_user";
+    public function getPayments($id_user) {
+        $sql = "SELECT SUM(a.partial_payment) AS totalPayments FROM payments a INNER JOIN credits c ON a.id_credit = c.id INNER JOIN sales v ON c.id_sale = v.id WHERE v.id_user = $id_user";
         return $this->select($sql);
     }
 
@@ -57,6 +62,4 @@ class CashdeskModel extends Query{
         $sql = "SELECT SUM(value) AS totalExpenses FROM expenses WHERE id_user = $id_user";
         return $this->select($sql);
     }
-
-
 }

@@ -8,13 +8,14 @@ use Dompdf\Dompdf;
 
 class Purchases extends Controller
 {
-    private $id_user;
+    private $id_user, $cashdesk;
 
 
     public function __construct()
     {
         parent::__construct();
-        session_start();
+        require_once 'controllers/Cashdesk.php';
+        $this->cashdesk = new Cashdesk();
         $this->id_user = $_SESSION['id_user'];
     }
 
@@ -35,7 +36,6 @@ class Purchases extends Controller
         $array['products'] = array();
         $total = 0;
         if (!empty($dataSet['products'])) {
-
             $index = $dataSet['serie'];
             // $numberSerie used to create the count for the serie of everyone purchase
             $numberSerie = $this->generate_numbers($index, 1, 8);
@@ -49,6 +49,7 @@ class Purchases extends Controller
             } else if (empty($serie)) {
                 $response = array('msg' => 'La serie es necesaria', 'type' => 'warning');
             } else {
+                $remainder = $this->cashdesk->getDataset();
                 foreach ($dataSet['products'] as $product) {
                     $result = $this->model->getProduct($product['id']);
                     $data['id'] = $result['id'];
@@ -59,23 +60,25 @@ class Purchases extends Controller
                     array_push($array['products'], $data);
                     $total += $subTotal;
                 }
-                $productsData = json_encode($array['products']);
-                $purchase = $this->model->registerPurchase($productsData, $total, $date, $time, $serie, $idSupplier, $this->id_user);
-                if ($purchase > 0) {
-                    foreach ($dataSet['products'] as $product) {
-                        $result = $this->model->getProduct($product['id']);
-                        //Update stock
-                        $newQuantity = $result['quantity'] + $product['quantity'];
-                        $this->model->updateStock($newQuantity, $result['id']);
-                        
-                        $transaction = 'Compra N°: ' . $purchase;
-                        $this->model->recordTransaction($transaction, 'input', $product['quantity'], $newQuantity, $product['id'], $this->id_user);
+                if ($remainder['remainder'] >= $total) {
+                    $productsData = json_encode($array['products']);
+                    $purchase = $this->model->registerPurchase($productsData, $total, $date, $time, $serie, $idSupplier, $this->id_user);
+                    if ($purchase > 0) {
+                        foreach ($dataSet['products'] as $product) {
+                            $result = $this->model->getProduct($product['id']);
+                            //Update stock
+                            $newQuantity = $result['quantity'] + $product['quantity'];
+                            $this->model->updateStock($newQuantity, $result['id']);
 
-                        
+                            $transaction = 'Compra N°: ' . $purchase;
+                            $this->model->recordTransaction($transaction, 'input', $product['quantity'], $newQuantity, $product['id'], $this->id_user);
+                        }
+                        $response = array('msg' => 'Compra realizada', 'type' => 'success', 'idPurchase' => $purchase);
+                    } else {
+                        $response = array('msg' => 'Error al generar la compra', 'type' => 'error');
                     }
-                    $response = array('msg' => 'Compra realizada', 'type' => 'success', 'idPurchase' => $purchase);
-                } else {
-                    $response = array('msg' => 'Error al generar la compra', 'type' => 'error');
+                }else {
+                    $response = array('msg' => 'Saldo en caja insuficiente! '.'Disponible: '.number_format($remainder['remainder'],2) , 'type' => 'warning');
                 }
             }
         } else {

@@ -84,5 +84,10 @@ class SalesModel extends Query{
         
     }
 
+    public function getCashdesk($id_user) {
+        $sql = "SELECT * FROM cashdesk WHERE status = 1 AND id_user = $id_user";
+        return $this->select($sql);
+    }
+
 }
 ?>

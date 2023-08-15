@@ -61,44 +61,47 @@ class Sales extends Controller
             } else if (empty($paymentMethod)) {
                 $response = array('msg' => 'El método de pago es necesaria', 'type' => 'warning');
             } else {
-                foreach ($dataSet['products'] as $product) {
-                    $result = $this->model->getProduct($product['id']);
-                    $data['id'] = $result['id'];
-                    $data['description'] = $result['description'];
-                    $data['price'] = $result['sale_price'];
-                    $data['quantity'] = $product['quantity'];
-                    $subTotal = $result['sale_price'] * $product['quantity'];
-                    array_push($array['products'], $data);
-                    $total += $subTotal;
-                }
-
-                $productsData = json_encode($array['products']);
-                $sale = $this->model->registerSale($productsData, $total, $date, $time, $paymentMethod, $discount, $serie[0], $idClient, $this->id_user);
-                if ($sale > 0) {
+                $checkCashdesk =  $this->model->getCashdesk($this->id_user);
+                if (empty($checkCashdesk['initial_value'])) {
+                    $response = array('msg' => 'La caja está cerrada', 'type' => 'warning');
+                } else {
                     foreach ($dataSet['products'] as $product) {
                         $result = $this->model->getProduct($product['id']);
-                        //Update stock
-                        $newQuantity = $result['quantity'] - $product['quantity'];
-                        $this->model->updateStock($newQuantity, $result['id']);
-
-                        $transaction = 'Venta N°: ' . $sale;
-                        $quantity = $product['quantity'];
-                        $this->model->recordTransaction($transaction, 'output', $quantity, $newQuantity, $product['id'], $this->id_user);
-
-                        
+                        $data['id'] = $result['id'];
+                        $data['description'] = $result['description'];
+                        $data['price'] = $result['sale_price'];
+                        $data['quantity'] = $product['quantity'];
+                        $subTotal = $result['sale_price'] * $product['quantity'];
+                        array_push($array['products'], $data);
+                        $total += $subTotal;
                     }
 
-                    if ($paymentMethod == 'credito') {
-                        $valueCredit = $total - $discount;
-                        $this->model->registerCredits($valueCredit, $date, $time, $sale);
-                    }
-                    // if ($dataSet['print']) {
-                    //     $this->directPrinting($sale);
-                    // }
+                    $productsData = json_encode($array['products']);
+                    $sale = $this->model->registerSale($productsData, $total, $date, $time, $paymentMethod, $discount, $serie[0], $idClient, $this->id_user);
+                    if ($sale > 0) {
+                        foreach ($dataSet['products'] as $product) {
+                            $result = $this->model->getProduct($product['id']);
+                            //Update stock
+                            $newQuantity = $result['quantity'] - $product['quantity'];
+                            $this->model->updateStock($newQuantity, $result['id']);
 
-                    $response = array('msg' => 'Venta realizada', 'type' => 'success', 'idSale' => $sale);
-                } else {
-                    $response = array('msg' => 'Error al generar la venta', 'type' => 'error');
+                            $transaction = 'Venta N°: ' . $sale;
+                            $quantity = $product['quantity'];
+                            $this->model->recordTransaction($transaction, 'output', $quantity, $newQuantity, $product['id'], $this->id_user);
+                        }
+
+                        if ($paymentMethod == 'credito') {
+                            $valueCredit = $total - $discount;
+                            $this->model->registerCredits($valueCredit, $date, $time, $sale);
+                        }
+                        // if ($dataSet['print']) {
+                        //     $this->directPrinting($sale);
+                        // }
+
+                        $response = array('msg' => 'Venta realizada', 'type' => 'success', 'idSale' => $sale);
+                    } else {
+                        $response = array('msg' => 'Error al generar la venta', 'type' => 'error');
+                    }
                 }
             }
         } else {
