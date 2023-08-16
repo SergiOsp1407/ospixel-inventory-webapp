@@ -14,6 +14,12 @@ class Admin extends Controller
 
         $data['title'] = 'Panel Administrativo';
         $data['script'] = 'index.js';
+        $data['users'] = $this->model->getTotals('users');
+        $data['clients'] = $this->model->getTotals('clients');
+        $data['suppliers'] = $this->model->getTotals('suppliers');
+        $data['products'] = $this->model->getTotals('products');
+        $data['sales'] = $this->model->getTotals('sales');
+        // $data['reservtions'] = $this->model->getTotals('reservtions');
         $this->views->getView('admin', 'home', $data);
     }
 

@@ -3,63 +3,84 @@
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
 	<div class="col">
-		<div class="card radius-10 border-start border-0 border-3 border-info">
+		<div class="card radius-10 border-start border-0 border-3 border-secondary">
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
-						<p class="mb-0 text-secondary">Total Orders</p>
-						<h4 class="my-1 text-info">4805</h4>
-						<p class="mb-0 font-13">+2.5% from last week</p>
+						<p class="mb-0 text-secondary">Usuarios</p>
+						<h4 class="my-1 text-info"><?php echo $data['users']['totals']; ?></h4>
+						<a class="mb-0 font-13" href="<?php echo BASE_URL . 'users'; ?>">Ver</a>
 					</div>
 					<div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto">
-						<i class='bx bxs-cart'></i>
+						<i class="fa-solid fa-users"></i>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col">
-		<div class="card radius-10 border-start border-0 border-3 border-danger">
+		<div class="card radius-10 border-start border-0 border-3 border-secondary">
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
-						<p class="mb-0 text-secondary">Total Revenue</p>
-						<h4 class="my-1 text-danger">$84,245</h4>
-						<p class="mb-0 font-13">+5.4% from last week</p>
+						<p class="mb-0 text-secondary">Clientes</p>
+						<h4 class="my-1 text-info"><?php echo $data['clients']['totals']; ?></h4>
+						<a class="mb-0 font-13" href="<?php echo BASE_URL . 'clients'; ?>">Ver</a>
 					</div>
-					<div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i class='bx bxs-wallet'></i>
+					<div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto">
+						<!-- <i class='bx bxs-wallet'></i> -->
+						<i class="fa-solid fa-users-rays"></i>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col">
-		<div class="card radius-10 border-start border-0 border-3 border-success">
+		<div class="card radius-10 border-start border-0 border-3 border-secondary">
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
-						<p class="mb-0 text-secondary">Bounce Rate</p>
-						<h4 class="my-1 text-success">34.6%</h4>
-						<p class="mb-0 font-13">-4.5% from last week</p>
+						<p class="mb-0 text-secondary">Proveedores</p>
+						<h4 class="my-1 text-info"><?php echo $data['suppliers']['totals']; ?></h4>
+						<a class="mb-0 font-13" href="<?php echo BASE_URL . 'suppliers'; ?>">Ver</a>
 					</div>
 					<div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
-						<i class='bx bxs-bar-chart-alt-2'></i>
+						<!-- <i class='bx bxs-bar-chart-alt-2'></i> -->
+						<i class="fa-solid fa-truck-field"></i>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col">
-		<div class="card radius-10 border-start border-0 border-3 border-warning">
+		<div class="card radius-10 border-start border-0 border-3 border-secondary">
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
-						<p class="mb-0 text-secondary">Total Customers</p>
-						<h4 class="my-1 text-warning">8.4K</h4>
-						<p class="mb-0 font-13">+8.4% from last week</p>
+						<p class="mb-0 text-secondary">Productos</p>
+						<h4 class="my-1 text-info"><?php echo $data['products']['totals']; ?></h4>
+						<a class="mb-0 font-13" href="<?php echo BASE_URL . 'products'; ?>">Ver</a>
 					</div>
 					<div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto">
-						<i class='bx bxs-group'></i>
+						<!-- <i class='bx bxs-group'></i> -->
+						<i class="bi bi-box-seam-fill"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="card radius-10 border-start border-0 border-3 border-secondary">
+			<div class="card-body">
+				<div class="d-flex align-items-center">
+					<div>
+						<p class="mb-0 text-secondary">Ventas</p>
+						<h4 class="my-1 text-info"><?php echo $data['sales']['totals']; ?></h4>
+						<a class="mb-0 font-13" href="<?php echo BASE_URL . 'sales'; ?>">Ver</a>
+					</div>
+					<div class="widgets-icons-2 rounded-circle bg-gradient-deepblue text-white ms-auto">
+						<!-- <i class='bx bxs-group'></i> -->
+						<i class="fa-solid fa-money-bill-trend-up"></i>
 					</div>
 				</div>
 			</div>
@@ -74,12 +95,12 @@
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
-						<h6 class="mb-0">Sales Overview</h6>
+						<h6 class="mb-0">Compras y Ventas</h6>
 					</div>
 					<div class="dropdown ms-auto">
 						<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
 						</a>
-						<ul class="dropdown-menu">
+						<!-- <ul class="dropdown-menu">
 							<li><a class="dropdown-item" href="javascript:;">Action</a>
 							</li>
 							<li><a class="dropdown-item" href="javascript:;">Another action</a>
@@ -89,36 +110,36 @@
 							</li>
 							<li><a class="dropdown-item" href="javascript:;">Something else here</a>
 							</li>
-						</ul>
+						</ul> -->
 					</div>
 				</div>
 				<div class="d-flex align-items-center ms-auto font-13 gap-2 my-3">
-					<span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #14abef"></i>Sales</span>
-					<span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #ffc107"></i>Visits</span>
+					<span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #14abef"></i>Ventas</span>
+					<span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #ffc107"></i>Compras</span>
 				</div>
 				<div class="chart-container-1">
 					<canvas id="chart1"></canvas>
 				</div>
 			</div>
-			<div class="row row-cols-1 row-cols-md-3 row-cols-xl-3 g-0 row-group text-center border-top">
+			<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2 g-0 row-group text-center border-top">
 				<div class="col">
 					<div class="p-3">
-						<h5 class="mb-0">24.15M</h5>
-						<small class="mb-0">Overall Visitor <span> <i class="bx bx-up-arrow-alt align-middle"></i> 2.43%</span></small>
+						<h5 class="mb-0">000</h5>
+						<small class="mb-0">Ventas Totales </small>
 					</div>
 				</div>
 				<div class="col">
 					<div class="p-3">
-						<h5 class="mb-0">12:38</h5>
-						<small class="mb-0">Visitor Duration <span> <i class="bx bx-up-arrow-alt align-middle"></i> 12.65%</span></small>
+						<h5 class="mb-0">000</h5>
+						<small class="mb-0">Compras Totales </small>
 					</div>
 				</div>
-				<div class="col">
+				<!-- <div class="col">
 					<div class="p-3">
 						<h5 class="mb-0">639.82</h5>
 						<small class="mb-0">Pages/Visit <span> <i class="bx bx-up-arrow-alt align-middle"></i> 5.62%</span></small>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -127,7 +148,7 @@
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
-						<h6 class="mb-0">Trending Products</h6>
+						<h6 class="mb-0">Productos más vendidos</h6>
 					</div>
 					<div class="dropdown ms-auto">
 						<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
@@ -169,6 +190,60 @@
 <!--end row-->
 
 <div class="card radius-10">
+	<div class="card-body">
+		<div class="d-flex align-items-center">
+			<div>
+				<h6 class="mb-0">Productos Recientes</h6>
+			</div>
+			<div class="dropdown ms-auto">
+				<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="javascript:;">Action</a>
+					</li>
+					<li><a class="dropdown-item" href="javascript:;">Another action</a>
+					</li>
+					<li>
+						<hr class="dropdown-divider">
+					</li>
+					<li><a class="dropdown-item" href="javascript:;">Something else here</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table align-middle mb-0">
+				<thead class="table-light">
+					<tr>
+						<th>Producto</th>
+						<th>Foto</th>
+						<th>Precio Compra</th>
+						<th>Precio Venta</th>
+						<th>Fecha</th>
+						<th>Categoria</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Iphone 5</td>
+						<td><img src="<?php echo BASE_URL; ?>assets/images/products/01.png" class="product-img-2" alt="product img"></td>
+						<td><span class="badge bg-gradient-quepal text-white shadow-sm w-100">Paid</span>
+						</td>
+						<td>$1250.00</td>
+						<td>03 Feb 2020</td>
+						<td>
+							<div class="progress" style="height: 6px;">
+								<div class="progress-bar bg-gradient-quepal" role="progressbar" style="width: 100%"></div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!-- <div class="card radius-10">
 	<div class="card-body">
 		<div class="d-flex align-items-center">
 			<div>
@@ -295,15 +370,15 @@
 			</table>
 		</div>
 	</div>
-</div>
+</div> -->
 
 <!--end row-->
 
-<div class="row row-cols-1 row-cols-lg-3">
+<div class="row row-cols-1 row-cols-lg-2">
 	<div class="col d-flex">
 		<div class="card radius-10 w-100">
 			<div class="card-body">
-				<p class="font-weight-bold mb-1 text-secondary">Weekly Revenue</p>
+				<p class="font-weight-bold mb-1 text-secondary">Gastos Mensuales</p>
 				<div class="d-flex align-items-center mb-4">
 					<div>
 						<h4 class="mb-0">$89,540</h4>
@@ -324,7 +399,7 @@
 			<div class="card-header bg-transparent">
 				<div class="d-flex align-items-center">
 					<div>
-						<h6 class="mb-0">Orders Summary</h6>
+						<h6 class="mb-0">Productos con bajas unidades</h6>
 					</div>
 					<div class="dropdown ms-auto">
 						<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
@@ -361,7 +436,7 @@
 			</ul>
 		</div>
 	</div>
-	<div class="col d-flex">
+	<!-- <div class="col d-flex">
 		<div class="card radius-10 w-100">
 			<div class="card-header bg-transparent">
 				<div class="d-flex align-items-center">
@@ -405,8 +480,8 @@
 				</div>
 			</div>
 			<!--end row-->
-		</div>
-	</div>
+		<!--</div>
+	</div> -->
 </div>
 <!--end row-->
 
