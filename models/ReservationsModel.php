@@ -19,6 +19,12 @@ class ReservationsModel extends Query{
         
     }
 
+    public function registerDetail($value, $idReservation, $id_user) {
+        $sql = "INSERT INTO reservations_details (value, id_reservation, id_user) VALUES (?,?,?)";
+        $array = array($value, $idReservation, $id_user);
+        return $this->insert($sql, $array);
+    }
+
     public function getCompany() {
 
         $sql = "SELECT * FROM configuration";
@@ -43,6 +49,13 @@ class ReservationsModel extends Query{
     public function processRetirement($partialPayment, $status, $idReservation) {
         $sql = "UPDATE reservations SET partialPayment = ?, status = ? WHERE id = ?";
         $array = array($partialPayment, $status, $idReservation);
+        return $this->save($sql, $array);
+    }
+
+    //Update reservations details
+    public function updateReservationDetail($value, $idReservation) {
+        $sql = "UPDATE reservations_details SET value = ? WHERE id_reservation = ?";
+        $array = array($value, $idReservation);
         return $this->save($sql, $array);
     }
 

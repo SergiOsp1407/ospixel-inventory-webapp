@@ -7,10 +7,11 @@ require 'vendor/autoload.php';
 use Dompdf\Dompdf;
 
 class Credits extends Controller{
-
+    private $id_user;
     public function __construct() {
         parent::__construct();
         session_start();
+        $this->id_user = $_SESSION['id_user'];
     }
     
     public function index() {
@@ -78,7 +79,7 @@ class Credits extends Controller{
         if (!empty($dataSet)) {
             $idCredit = strClean($dataSet['idCredit']);
             $paid_value = strClean($dataSet['paid_value']);
-            $data = $this->model->registerPartialPayment($paid_value, $idCredit);
+            $data = $this->model->registerPartialPayment($paid_value, $idCredit, $this->id_user);
             if ($data > 0) {
                 $response = array('msg' => 'Abono registrado', 'type' => 'success');
             }else{

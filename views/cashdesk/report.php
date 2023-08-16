@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report</title>
+    <title><?php echo $data['title'] ?></title>
     <link rel="stylesheet" href="<?php echo BASE_URL . 'assets/css/invoice.css'; ?>">
 </head>
 
@@ -26,8 +26,12 @@
                     <span class="invoice"><strong>Transacciones</strong></span>
                     <!-- <p><strong>N°: </strong><?php echo $data['quote']['id']; ?></p>
                     <p><strong>Fecha: </strong><?php echo $data['quote']['date']; ?></p> -->
-                    <p><strong>Usuario: </strong><?php echo $_SESSION['name_user']; ?></p>
-                    <!-- <p><strong>Hora: </strong><?php echo $data['quote']['time']; ?></p> -->
+                    <?php if ($data['actual']) { ?>
+                        <p><strong>Usuario: </strong><?php echo $_SESSION['name_user']; ?></p>
+                        <!-- <p><strong>Hora: </strong><?php echo $data['quote']['time']; ?></p> -->
+                    <?php } else { ?>
+                        <p>Reporte N°: <strong><?php echo $data['idCashdesk'] ?></strong></p>
+                    <?php } ?>
                 </div>
             </td>
         </tr>

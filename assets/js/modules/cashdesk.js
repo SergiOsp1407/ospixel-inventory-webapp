@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { data: "final_value" },
         { data: "total_sales_quantity" },
         { data: "name" },
+        { data: "action" }
       ],
       language: {
         url: base_url + "assets/js/spanish.json",
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
       dom,
       buttons,
       responsive: true,
-      order: [[0, "asc"]],
+      order: [[2, "asc"]],
     });
 
     //Usage of ckeditor
@@ -99,7 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         const url = base_url + "cashdesk/registerExpense";
         insertRecords(url, this, tblExpenses, btnRegisterExpense, false);
-        transactions();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     });
 
@@ -134,9 +137,9 @@ function transactions() {
   http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const response = JSON.parse(this.responseText);
-      if (myChart) {
-        myChart.destroy();
-      }
+      // if (myChart) {
+      //   myChart.destroy();
+      // }
       var ctx = document.getElementById("transactionReport").getContext("2d");
 
       myChart = new Chart(ctx, {
@@ -216,4 +219,40 @@ function transactions() {
       document.querySelector("#listTransactions").innerHTML = html;
     }
   };
+}
+
+function closeCashdesk() {
+  Swal.fire({
+    title: "¿Deseas cerrar la caja?",
+    text: "Esta acción no se puede reversar.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, cierrala!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + 'cashdesk/closeCashdesk';
+      //Create an instance of XMLHttpRequest
+      const http = new XMLHttpRequest();
+      //Open connection - POST - GET
+      http.open("GET", url, true);
+      //Sen data
+      http.send();
+      //Check status
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const response = JSON.parse(this.responseText);
+          if (response.type == "success") {
+            window.location.reload();
+          }
+        }
+      };
+      // Swal.fire(
+      //   'Deleted!',
+      //   'Your file has been deleted.',
+      //   'success'
+      // )
+    }
+  });
 }

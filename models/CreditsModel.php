@@ -23,10 +23,10 @@ class CreditsModel extends Query{
         
     }
 
-    public function registerPartialPayment($paid_value, $idCredit) {
+    public function registerPartialPayment($paid_value, $idCredit, $id_user) {
 
-        $sql = "INSERT INTO payments (partial_payment, id_credit) VALUES (?,?)";
-        $array = array($paid_value, $idCredit);
+        $sql = "INSERT INTO payments (partial_payment, id_credit, id_user) VALUES (?,?,?)";
+        $array = array($paid_value, $idCredit, $id_user);
         return $this->insert($sql, $array);
     }
 

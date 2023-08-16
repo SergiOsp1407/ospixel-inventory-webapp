@@ -5,6 +5,7 @@ require 'vendor/autoload.php';
 
 // reference the Dompdf namespace
 use Dompdf\Dompdf;
+
 class Cashdesk extends Controller
 {
 
@@ -54,6 +55,9 @@ class Cashdesk extends Controller
     public function list()
     {
         $data = $this->model->getCashdesks();
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['action'] = '<a href="' . BASE_URL . 'cashdesk/historyReport/' . $data[$i]['id'] . '" target="_blank" class="btn btn-danger"><i class="fas fa-file-pdf"></i></a>';
+        }
         echo json_encode($data);
         die();
     }
@@ -121,10 +125,10 @@ class Cashdesk extends Controller
     public function getDataset()
     {
 
-        $querySale = $this->model->getSales('total',$this->id_user);
+        $querySale = $this->model->getSales('total', $this->id_user);
         $sales = ($querySale['totalSales'] != null) ? $querySale['totalSales'] : 0;
 
-        $queryDiscount = $this->model->getSales('discount',$this->id_user);
+        $queryDiscount = $this->model->getSales('discount', $this->id_user);
         $discount = ($queryDiscount['totalSales'] != null) ? $queryDiscount['totalSales'] : 0;
 
         $queryReservation = $this->model->getReservations($this->id_user);
@@ -141,11 +145,11 @@ class Cashdesk extends Controller
 
         $initialAmount = $this->model->getCashdesk($this->id_user);
 
-        $data['outgoings'] = $purchases + $expenses;
-        $data['income'] = ($sales + $reservations + $credits) - $discount;
-        $data['initialValue'] = (!empty($initialAmount['initial_value'])) ? $initialAmount['initial_value'] : 0;
-        $data['expenses'] = $expenses;
-        $data['remainder'] = ($data['income'] + $data['initialValue']) - $data['outgoings'];
+        $data['outgoings'] = number_format($purchases + $expenses, 2, '.', '');
+        $data['income'] = number_format(($sales + $reservations + $credits) - $discount, 2, '.', '');
+        $data['initialValue'] = (!empty($initialAmount['initial_value'])) ? number_format($initialAmount['initial_value'], 2, '.', '') : 0;
+        $data['expenses'] = number_format($expenses, 2, '.', '');
+        $data['remainder'] = number_format(($data['income'] + $data['initialValue']) - $data['outgoings'], 2, '.', '');
 
         $data['outgoingsDecimal'] = number_format($data['outgoings'], 2);
         $data['incomeDecimal'] = number_format($data['income'], 2);
@@ -160,14 +164,15 @@ class Cashdesk extends Controller
     public function report()
     {
         ob_start();
-    
-        $data['title'] = 'Reporte';
+
+        $data['title'] = 'Reporte actual';
+        $data['actual'] = true;
         $data['company'] = $this->model->getCompany();
         $data['transactions'] = $this->getDataset();
 
         $this->views->getView('cashdesk', 'report', $data);
         $html = ob_get_clean();
-    
+
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
         $options = $dompdf->getOptions();
@@ -175,15 +180,79 @@ class Cashdesk extends Controller
         $options->set('isRemoteEnabled', true);
         $dompdf->setOptions($options);
         $dompdf->loadHtml($html);
-    
+
         // (Optional) Setup the paper size and orientation
         // $dompdf->setPaper(array(0, 0, 222, 841), 'portrait');
         // $dompdf->setPaper('letter', 'portrait');
         $dompdf->setPaper('A4', 'vertical');
-        
+
         // Render the HTML as PDF
         $dompdf->render();
-    
+
+        // Output the generated PDF to Browser
+        $dompdf->stream('Reporte.pdf', array('Attachment' => false));
+    }
+
+    public function closeCashdesk()
+    {
+
+        $data = $this->getDataset();
+        $salesQuantity = $this->model->getTotalSales($this->id_user);
+        $closing_date = date('Y-m-d');
+        $final_value = $data['income'];
+        $total_sales_quantity = $salesQuantity['totalSalesQuantity'];
+        $outgoings = $data['outgoings'];
+        $expenses = $data['expenses'];
+        $result = $this->model->closeCashdesk($closing_date, $final_value, $total_sales_quantity, $outgoings, $expenses, $this->id_user);
+        if ($result == 1) {
+            $this->model->updateOpening('purchases', $this->id_user);
+            $this->model->updateOpening('expenses', $this->id_user);
+            $this->model->updateOpening('sales', $this->id_user);
+            $this->model->updateOpening('payments', $this->id_user);
+            $this->model->updateOpening('reservations_details', $this->id_user);
+
+            $response = array('msg' => 'Caja cerrada', 'type' => 'success');
+        } else {
+            $response = array('msg' => 'Error al cerrar la caja', 'type' => 'error');
+        }
+        echo json_encode($response);
+        die();
+    }
+
+    public function historyReport($idCashdesk)
+    {
+        ob_start();
+
+        $data['title'] = 'Reporte: '.$idCashdesk;
+        $data['idCashdesk'] = $idCashdesk;
+        $data['actual'] = false;
+        $data['company'] = $this->model->getCompany();
+        $dataSet = $this->model->getHistoryCashdesk($idCashdesk);
+        $data['transactions']['initialValueDecimal'] = number_format($dataSet['initial_value']);
+        $data['transactions']['incomeDecimal'] = number_format($dataSet['final_value']);
+        $data['transactions']['outgoingsDecimal'] = number_format($dataSet['outgoings']);
+        $data['transactions']['expensesDecimal'] = number_format($dataSet['expenses']);
+        $data['transactions']['remainderDecimal'] = number_format($dataSet['final_value'] + $dataSet['initial_value'], 2);
+
+        $this->views->getView('cashdesk', 'report', $data);
+        $html = ob_get_clean();
+
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        $options = $dompdf->getOptions();
+        $options->set('isJavascriptEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        // $dompdf->setPaper(array(0, 0, 222, 841), 'portrait');
+        // $dompdf->setPaper('letter', 'portrait');
+        $dompdf->setPaper('A4', 'vertical');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
         // Output the generated PDF to Browser
         $dompdf->stream('Reporte.pdf', array('Attachment' => false));
     }

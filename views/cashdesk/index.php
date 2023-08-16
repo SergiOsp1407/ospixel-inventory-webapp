@@ -32,11 +32,17 @@
                 <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href=#" data-bs-toggle="modal" data-bs-target="#modalCashdesk"><i class="fa-solid fa-box-open"></i> Apertura de caja </a>
-                    </li>
+                    <?php if (empty($data['cashdesk'])) { ?>
+                        <li><a class="dropdown-item" href=#" data-bs-toggle="modal" data-bs-target="#modalCashdesk"><i class="fa-solid fa-box-open"></i> Apertura de caja </a>
+                        </li>
+                    <?php } else { ?>
+                        <li><a class="dropdown-item" href=#" onclick="closeCashdesk()"><i class="fa-solid fa-lock"></i> Cerrar caja </a>
+                        </li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
+        
         <hr>
         <?php if (!empty($data['cashdesk'])) { ?>
             <nav>
@@ -59,6 +65,7 @@
                                     <th>Monto Final</th> <!--final_value -->
                                     <th>Total # ventas</th> <!--total_sales_quantity -->
                                     <th>Usuario</th><!-- id_user -->
+                                    <th></th><!--  -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,7 +127,7 @@
                             <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<?php echo BASE_URL.'cashdesk/report';?>" target="_blank"><i class="fa-solid fa-file-pdf text-danger"></i> Reporte </a>
+                                <li><a class="dropdown-item" href="<?php echo BASE_URL . 'cashdesk/report'; ?>" target="_blank"><i class="fa-solid fa-file-pdf text-danger"></i> Reporte </a>
                                 </li>
                             </ul>
                         </div>

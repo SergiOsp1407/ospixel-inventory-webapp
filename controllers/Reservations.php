@@ -75,6 +75,7 @@ class Reservations extends Controller
                         $transaction = 'Reservación N°: ' . $reservation;
                         $this->model->recordTransaction($transaction, 'output', $product['quantity'], $newQuantity,$product['id'], $this->id_user);
                     }
+                    $this->model->registerDetail($partialPayment, $reservation, $this->id_user);
                     $response = array('msg' => 'Reservación realizada', 'type' => 'success', 'idReservation' => $reservation);
                 } else {
                     $response = array('msg' => 'Error al generar la reservación', 'type' => 'error');
@@ -162,6 +163,7 @@ class Reservations extends Controller
         $reservation = $this->model->getReservation($idReservation);
         $data = $this->model->processRetirement($reservation['total'], 0, $idReservation);
         if ($data == 1) {
+            $this->model->updateReservationDetail($reservation['total'], $idReservation);
             $response = array('msg' => 'Procesado con éxito', 'type' => 'success');
         } else {
             $response = array('msg' => 'Error al procesar', 'type' => 'error');
